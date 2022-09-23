@@ -13,21 +13,28 @@
 #define CATALYST_CPP_VERSION __cplusplus
 #endif
 
-#define CARALYST_IS_CPP_VERSION_GREATER(VERSION) (CATALYST_CPP_VERSION >= VERSION)
+#define CATALYST_IS_CPP_VERSION_GREATER(VERSION) (CATALYST_CPP_VERSION >= VERSION)
 
 ///----------------------------------------------
 /// CATALYST CPP HELPER DEFINITIONS
 ///----------------------------------------------
 
-#if CARALYST_IS_CPP_VERSION_GREATER( CATALYST_CPP_VERSION_20 )
+#if CATALYST_IS_CPP_VERSION_GREATER( CATALYST_CPP_VERSION_20 )
     #define CATALYST_LOGIC_DISCARD [[nodiscard]]
-#elif CARALYST_IS_CPP_VERSION_GREATER( CATALYST_CPP_VERSION_17 )
+#elif CATALYST_IS_CPP_VERSION_GREATER( CATALYST_CPP_VERSION_17 )
     #define CATALYST_LOGIC_DISCARD [[nodiscard]]
 #else
     #error C++ versions less than 17 not supported
 #endif
 
+///----------------------------------------------
+/// CATALYST INTERNALS
+///----------------------------------------------
+
 #include <mutex>
+
+#ifndef CATALYST_INTERNAL_HEADER
+#define CATALYST_INTERNAL_HEADER
 
 namespace Catalyst
 {
@@ -62,3 +69,5 @@ namespace Catalyst
     };
 
 }
+
+#endif //CATALYEST_INTERNAL_HEADER

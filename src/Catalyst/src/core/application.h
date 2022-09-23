@@ -4,6 +4,10 @@
 #include "type_traits.h"
 
 #include <mutex>
+#include <atomic>
+
+#ifndef CATALYST_APPLICATION_HEADER
+#define CATALYST_APPLICATION_HEADER
 
 namespace Catalyst
 {
@@ -83,7 +87,8 @@ namespace Catalyst
 
         IApplication::Get()->m_Close.store(true);
 
-        IApplication::Get()->~IApplication();
+        IApplication::s_Instance.load()->~IApplication();
+        IApplication::s_Instance.load().reset();
     }
 
     /**
@@ -103,6 +108,11 @@ namespace Catalyst
 
         IApplication::Get()->Run();
 
-        return CatalystResult::Success;
+        if (IApplication::Get()->s_Reload)
+            return CatalystResult::IApplication_Recreation_Request;
+        else
+            return CatalystResult::Success;
     }
 }
+
+#endif //CATALYST_APPLICATION_HEADER

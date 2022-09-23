@@ -10,7 +10,6 @@ Reactor::Reactor()
 }
 Reactor::~Reactor()
 {
-
 }
 void Reactor::Run()
 {

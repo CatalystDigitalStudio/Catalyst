@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef CATALYST_TRAITS_HEADER
+#define CATALYST_TRAITS_HEADER
+
 namespace Catalyst
 {
 
@@ -35,3 +38,5 @@ namespace Catalyst
         using type = T;
     };
 }
+
+#endif //CATALYST_TRAITS_HEADER

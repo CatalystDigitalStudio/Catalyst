@@ -10,6 +10,8 @@ namespace Catalyst
         : m_Name(process_name), m_Close(false)
     {
         s_Reload.store(false);
+
+        CATALYST_INFO("*************************\tCATALYST APPLICATION STARTING\t*************************\n");
     }
     CATALYST_LOGIC_DISCARD std::shared_ptr<IApplication> IApplication::Get()
     {
@@ -17,6 +19,7 @@ namespace Catalyst
     }
     IApplication::~IApplication()
     {
+        //CATALYST_INFO("*************************\tCATALYST APPLICATION STOPING\t*************************\n");
     }
     const bool IApplication::Close() const
     {

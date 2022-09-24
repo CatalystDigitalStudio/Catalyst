@@ -36,6 +36,7 @@
     <ClInclude Include="src\phc.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\Profiling.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\application.cpp">
@@ -50,5 +51,6 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\Profiling.cpp" />
   </ItemGroup>
 </Project>

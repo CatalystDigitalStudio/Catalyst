@@ -1,9 +1,10 @@
 #pragma once
 
 #include "spdlog/spdlog.h"
+#include "spdlog/logger.h"
 
-#ifndef CATALYST_LOGGING_HEADER
-#define CATALYST_LOGGING_HEADER
+#ifndef CATALYST_HEADER_LOGGING
+#define CATALYST_HEADER_LOGGING
 
 namespace Catalyst
 {
@@ -32,88 +33,27 @@ namespace Catalyst
         static void initalizeDefault();
         static void cleanup();
 
-
-        template<typename... Args>
-        static inline void trace(const char* msg, Args&&... args)
-        {
-            catalyst_s_logger->trace(msg, args...);
-            catalyst_s_logger->flush();
-        }
-
-        template<typename... Args>
-        static inline void info(const char* msg, Args&&... args)
-        {
-            catalyst_s_logger->info(msg, args...);
-            catalyst_s_logger->flush();
-        }
-
-        template<typename... Args>
-        static inline void warn(const char* msg, Args&&... args)
-        {
-            catalyst_s_logger->warn(msg, args...);
-            catalyst_s_logger->flush();
-        }
-        template<typename... Args>
-        static inline void error(const char* msg, Args&&... args)
-        {
-            catalyst_s_logger->error(msg, args...);
-            catalyst_s_logger->flush();
-        }
-        template<typename... Args>
-        static inline void critical(const char* msg, Args&&... args)
-        {
-            catalyst_s_logger->critical(msg, args...);
-            catalyst_s_logger->flush();
-        }
-
-
-        template<typename... Args>
-        static inline void core_trace(const char* msg, Args&&... args)
-        {
-            catalyst_s_core_logger->trace(msg, args...);
-            catalyst_s_core_logger->flush();
-        }
-
-        template<typename... Args>
-        static inline void core_info(const char* msg, Args&&... args)
-        {
-            catalyst_s_core_logger->info(msg, args...);
-            catalyst_s_core_logger->flush();
-        }
-
-        template<typename... Args>
-        static inline void core_warn(const char* msg, Args&&... args)
-        {
-            catalyst_s_core_logger->warn(msg, args...);
-            catalyst_s_core_logger->flush();
-        }
-        template<typename... Args>
-        static inline void core_error(const char* msg, Args&&... args)
-        {
-            catalyst_s_core_logger->error(msg, args...);
-            catalyst_s_core_logger->flush();
-        }
-        template<typename... Args>
-        static inline void core_critical(const char* msg, Args&&... args)
-        {
-            catalyst_s_core_logger->critical(msg, args...);
-            catalyst_s_core_logger->flush();
-        }
+        CATALYST_LOGIC_DISCARD static logger getLogger();
+#ifdef CATALYST_CORE
+        CATALYST_LOGIC_DISCARD static logger getCoreLogger();
+#endif
 
     };
 
 }
 
-#define CATALYST_TRACE(...)    Catalyst::Logger::trace(__VA_ARGS__)
-#define CATALYST_INFO(...)     Catalyst::Logger::info(__VA_ARGS__)
-#define CATALYST_WARN(...)     Catalyst::Logger::warn(__VA_ARGS__)
-#define CATALYST_ERROR(...)    Catalyst::Logger::error(__VA_ARGS__)
-#define CATALYST_CRITICAL(...) Catalyst::Logger::critcal(__VA_ARGS__)
+#define CATALYST_LOG_TRACE(...)    Catalyst::Logger::getLogger()->trace(__VA_ARGS__)
+#define CATALYST_LOG_INFO(...)     Catalyst::Logger::getLogger()->info(__VA_ARGS__)
+#define CATALYST_LOG_WARN(...)     Catalyst::Logger::getLogger()->warn(__VA_ARGS__)
+#define CATALYST_LOG_ERROR(...)    Catalyst::Logger::getLogger()->error(__VA_ARGS__)
+#define CATALYST_LOG_CRITICAL(...) Catalyst::Logger::getLogger()->critcal(__VA_ARGS__)
 
-#define CATALYST_CORE_TRACE(...)    Catalyst::Logger:core_trace(__VA_ARGS__)
-#define CATALYST_CORE_INFO(...)     Catalyst::Logger:core_info(__VA_ARGS__)
-#define CATALYST_CORE_WARN(...)     Catalyst::Logger:core_warn(__VA_ARGS__)
-#define CATALYST_CORE_ERROR(...)    Catalyst::Logger:core_error(__VA_ARGS__)
-#define CATALYST_CORE_CRITICAL(...) Catalyst::Logger:core_critcal(__VA_ARGS__)
+#ifdef CATALYST_CORE
+#define CATALYST_CORE_TRACE(...)    Catalyst::Logger::getCoreLogger()->trace(__VA_ARGS__)
+#define CATALYST_CORE_INFO(...)     Catalyst::Logger::getCoreLogger()->info(__VA_ARGS__)
+#define CATALYST_CORE_WARN(...)     Catalyst::Logger::getCoreLogger()->warn(__VA_ARGS__)
+#define CATALYST_CORE_ERROR(...)    Catalyst::Logger::getCoreLogger()->error(__VA_ARGS__)
+#define CATALYST_CORE_CRITICAL(...) Catalyst::Logger::getCoreLogger()->critcal(__VA_ARGS__)
+#endif
 
-#endif //CATALYEST_LOGGING_HEADER
+#endif //CATALYEST_HEADER_LOGGING

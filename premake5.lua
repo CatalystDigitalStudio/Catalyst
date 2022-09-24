@@ -2,7 +2,7 @@ include "dependancies.lua"
 
 workspace "Catalyst"
     architecture"x64"
-    startproject "Reaction"
+    startproject "Reactor"
 
     configurations { "Debug", "Release", "Distro" }
 

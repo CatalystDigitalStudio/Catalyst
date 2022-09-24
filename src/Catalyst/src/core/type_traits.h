@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef CATALYST_TRAITS_HEADER
-#define CATALYST_TRAITS_HEADER
+#ifndef CATALYST_HEADER_TRAITS
+#define CATALYST_HEADER_TRAITS
 
 namespace Catalyst
 {
@@ -39,4 +39,4 @@ namespace Catalyst
     };
 }
 
-#endif //CATALYST_TRAITS_HEADER
+#endif //CATALYST_HEADER_TRAITS

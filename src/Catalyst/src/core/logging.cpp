@@ -49,10 +49,19 @@ namespace Catalyst
 
 #if CATALYST_DEBUG
         Catalyst::Logger::addConsole();
+        Catalyst::Logger::addCoreConsole();
 #endif
     }
     void Logger::cleanup()
     {
         //TODO
+    }
+    CATALYST_LOGIC_DISCARD Logger::logger Logger::getLogger()
+    {
+        return catalyst_s_logger;
+    }
+    CATALYST_LOGIC_DISCARD Logger::logger Logger::getCoreLogger()
+    {
+        return catalyst_s_core_logger;
     }
 }

@@ -3,7 +3,7 @@
 
 namespace Catalyst
 {
-    std::atomic<std::shared_ptr<IApplication>> IApplication::s_Instance = nullptr;
+    std::atomic<std::shared_ptr<IApplication>> IApplication::s_Instance;
     std::atomic_bool IApplication::s_Reload;
 
     IApplication::IApplication(const char* process_name)
@@ -11,7 +11,7 @@ namespace Catalyst
     {
         s_Reload.store(false);
 
-        CATALYST_INFO("*************************\tCATALYST APPLICATION STARTING\t*************************\n");
+        CATALYST_CORE_INFO("*************************\tCATALYST APPLICATION STARTING\t*************************");
     }
     CATALYST_LOGIC_DISCARD std::shared_ptr<IApplication> IApplication::Get()
     {

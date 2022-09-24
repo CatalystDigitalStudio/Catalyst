@@ -1,12 +1,11 @@
 #pragma once
 
+#include "internal.h"
 #include "application.h"
 #include "logging.h"
 
-#define CATALYST_LAUNCH(APPLICATION) Catalyst::LaunchApplication<APPLICATION>();
-
-#ifndef CATALYST_ENTRY_HEADER
-#define CATALYST_ENTRY_HEADER
+#ifndef CATALYST_HEADER_ENTRY
+#define CATALYST_HEADER_ENTRY
 
 namespace Catalyst
 {
@@ -15,27 +14,35 @@ namespace Catalyst
 
 }
 
-#if defined(CATALYST_MAIN) || 1//<-- For writting purposes only!
-int main(int* argc, char* argv, char* envp)
+#if defined(CATALYST_MAIN) || 0//<-- For writting purposes only!
+
+int main(int argc, char** argv, char** envp)
 {
 
-    Catalyst::Logger::initalizeDefault();
-    Catalyst::Logger::addFile("catalyst_core_logger", "log/core_logger.log");
+    Catalyst::CatalystInitalizeEngine(argc, argv, envp);
 
 START:
-    CATALYST_INFO("*************************\tCATALYST ENGINE STARTING\t*************************\r\n");
 
     Catalyst::CatalystResult result = Catalyst::CatalystLaunch();
 
-    Catalyst::CloseApplication();
+    Catalyst::CatalystApplicationClose();
 
     if (result == Catalyst::CatalystResult::IApplication_Recreation_Request)
         goto START;
 
-    CATALYST_INFO("*************************\tCATALYST ENGINE STOPING\t*************************\r\n");
-
     return (int)result;
 }
 #endif
+#endif //CATALYST_HEADER_ENTRY
 
-#endif //CATALYST_ENTRY_HEADER
+/**
+ * CATALYST_LAUNCH - Launches the application.
+ * 
+ * @param APPLICATION - IApplication class to launch
+ */
+#define CATALYST_LAUNCH(APPLICATION)                           \
+                                                               \
+Catalyst::CatalystResult Catalyst::CatalystLaunch()            \
+{                                                              \
+    return Catalyst::CatalystApplicationLaunch<APPLICATION>(); \
+}

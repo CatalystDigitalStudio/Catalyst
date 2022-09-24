@@ -1,10 +1,4 @@
-[2022-09-22 22:49:34.366] [catalyst_logger] [info] *************************	CATALYST ENGINE STARTING	*************************
-
-[2022-09-22 22:49:34.368] [catalyst_logger] [info] *************************	CATALYST APPLICATION STARTING	*************************
-
-[2022-09-22 22:49:38.175] [catalyst_logger] [info] *************************	CATALYST ENGINE STARTING	*************************
-
-[2022-09-22 22:49:38.176] [catalyst_logger] [info] *************************	CATALYST APPLICATION STARTING	*************************
-
-[2022-09-22 22:49:39.415] [catalyst_logger] [info] *************************	CATALYST ENGINE STOPING	*************************
-
+[2022-09-23 17:47:33.816] [catalyst_core_logger] [info] *************************	CATALYST ENGINE STARTING	*************************
+[2022-09-23 17:47:55.877] [catalyst_core_logger] [info] *************************	CATALYST ENGINE STOPING	*************************
+[2022-09-23 17:47:33.816] [catalyst_core_logger] [info] *************************	CATALYST ENGINE STARTING	*************************
+[2022-09-23 17:47:55.877] [catalyst_core_logger] [info] *************************	CATALYST ENGINE STOPING	*************************

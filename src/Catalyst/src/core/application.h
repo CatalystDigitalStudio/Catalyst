@@ -6,8 +6,8 @@
 #include <mutex>
 #include <atomic>
 
-#ifndef CATALYST_APPLICATION_HEADER
-#define CATALYST_APPLICATION_HEADER
+#ifndef CATALYST_HEADER_APPLICATION
+#define CATALYST_HEADER_APPLICATION
 
 namespace Catalyst
 {
@@ -54,9 +54,9 @@ namespace Catalyst
         /** Friends */
     private:
         template<typename T, typename R>
-        friend static CatalystResult LaunchApplication();
-        friend static void CloseApplication();
-        friend static void ReloadApplication();
+        friend static CatalystResult CatalystApplicationLaunch();
+        friend static void           CatalystApplicationClose();
+        friend static void           CatalystApplicationReload();
 
     private:
         const char* m_Name;
@@ -69,7 +69,7 @@ namespace Catalyst
      * 
      * @brief IMPORTANT: For internal engine use only
      */
-    static void ReloadApplication()
+    static void CatalystApplicationReload()
     {
         IApplication::Get()->m_Close.store(true);
         IApplication::s_Reload.store(true);
@@ -80,7 +80,7 @@ namespace Catalyst
      * 
      * @brief IMPORTANT: For internal engine use only
      */
-    static void CloseApplication()
+    static void CatalystApplicationClose()
     {
         if (!IApplication::Get())
             return;
@@ -97,9 +97,11 @@ namespace Catalyst
      * @brief IMPORTANT: For internal engine use only
      */
     template<typename T, typename R = CatalystEnableIf<CatalystBaseOf<IApplication, T>::value, T>::type>
-    CATALYST_LOGIC_DISCARD static CatalystResult LaunchApplication()
+    CATALYST_LOGIC_DISCARD static CatalystResult CatalystApplicationLaunch()
     {
-        CloseApplication();
+        CATALYST_PROFILE_CORE_FUNCTION(nullptr);
+
+        CatalystApplicationClose();
 
         IApplication::s_Instance.store(std::make_shared<R>());
 
@@ -115,4 +117,4 @@ namespace Catalyst
     }
 }
 
-#endif //CATALYST_APPLICATION_HEADER
+#endif //CATALYST_HEADER_APPLICATION

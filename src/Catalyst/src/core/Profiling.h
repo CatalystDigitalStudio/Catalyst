@@ -11,13 +11,13 @@
 namespace Catalyst
 {
 
-    class Profile
+    class Profiler
     {
 
         static std::shared_ptr<spdlog::logger> s_Logger;
 
     private:
-        static void initalize(const char* path, const char* pattern = nullptr);
+        static void initalize(const char* path, const char* pattern = "%v");
 
     private:
         friend void CatalystInitalizeEngine(int argc, char** argv, char** envp);
@@ -28,8 +28,8 @@ namespace Catalyst
 
     public:
 
-        explicit Profile(const char* name);
-        ~Profile();
+        explicit Profiler(const char* name);
+        ~Profiler();
 
         void start();
         void stop();
@@ -52,7 +52,7 @@ namespace Catalyst
         explicit ProfileFunction(const char* function_name, size_t* result);
         ~ProfileFunction();
     private:
-        Profile m_Profile;
+        Profiler m_Profile;
         size_t* m_Result;
 
     };

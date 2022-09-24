@@ -27,7 +27,7 @@
     <ClInclude Include="src\core\logging.h">
       <Filter>src\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\strings.h">
+    <ClInclude Include="src\core\unicode.h">
       <Filter>src\core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\type_traits.h">
@@ -36,7 +36,7 @@
     <ClInclude Include="src\phc.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Profiling.h" />
+    <ClInclude Include="src\core\profiling.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\application.cpp">
@@ -51,6 +51,6 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Profiling.cpp" />
+    <ClCompile Include="src\core\profiling.cpp" />
   </ItemGroup>
 </Project>

@@ -39,7 +39,7 @@
 /**
  * Same as catalyst_assert, but is only included if building in debug.
  */
-#define CATALYST_DEBUG_ASSERT(X, ACTION) catalyst_assert(X, ACTION)
+#define CATALYST_DEBUG_ASSERT(X, ACTION) CATALYST_ASSERT(X, ACTION)
 
 #else
  /**
@@ -72,6 +72,7 @@
 
 #ifndef CATALYST_HEADER_INTERNAL
 #define CATALYST_HEADER_INTERNAL
+
 
 namespace Catalyst
 {
@@ -106,12 +107,15 @@ namespace Catalyst
         Error
     };
 
+    typedef enum class CatalystArguments CatalystArguments;
+    extern const char* catalystArguments[];
+
     struct CatalystError
     {
         Level level = Level::Error;
-        const char* message;
-        CatalystResult reason;
-        const char* function;
+        const char* message = 0;
+        CatalystResult reason = CatalystResult::Unknown;
+        const char* function = 0;
     };
 
     struct IMultithreadable
@@ -133,15 +137,6 @@ namespace Catalyst
     extern void CatalystSetErrorHandler(CatalystErrorHandler handler);
 
     /**
-     * Initalizes the engine using the provided arguments from the command-line and OS envioment.
-     * 
-     * @param argc - number of arguments
-     * @param argv - pointer to list of arguments
-     * @param envp - pointer to list of envioment varables
-     */
-    extern void CatalystInitalizeEngine(int argc, char** argv, char** envp);
-
-    /**
      * Sets a new error message to be handled.
      *
      * @param error - error information to pass on
@@ -153,8 +148,23 @@ namespace Catalyst
      */
     CATALYST_LOGIC_DISCARD extern CatalystError getLastEgineError();
 
-    typedef enum class CatalystArguments CatalystArguments;
-    extern const char* catalystArguments[];
+    /**
+     * Initalizes the engine using the provided arguments from the command-line and OS envioment.
+     * 
+     * @param argc - number of arguments
+     * @param argv - pointer to list of arguments
+     * @param envp - pointer to list of envioment varables
+     */
+    extern void CatalystInitalizeEngine(int argc, char** argv, char** envp);
+
+    extern void CatalystUpdate();
+
+    extern size_t CatalystGetCycleIndex();
+
+    extern size_t CatalystGetAllocations();
+
+    extern size_t CatalystGetAllocationAmount();
+
 
     /**
      * Copy a set of data from a source buffer to a destination buffer.
@@ -167,14 +177,14 @@ namespace Catalyst
     template<typename T>
     static constexpr void copy(const T* dest_begin, const T* dest_end, const T* src_begin, const T* src_end)
     {
-        CATALYST_DEBUG_ASSERT(dest_begin && dest_end && src_begin && src_end), raiseEngineError({ Level::Error, "CatalystResult::Pointer_Is_Nullptr", CatalystResult::Pointer_Is_Nullptr , __FUNCTION__ }));
+        CATALYST_DEBUG_ASSERT(dest_begin && dest_end && src_begin && src_end, raiseEngineError({ Level::Error, "CatalystResult::Pointer_Is_Nullptr", CatalystResult::Pointer_Is_Nullptr , __FUNCTION__ }));
 
         const size_t s_size = src_end - src_begin;
         const size_t d_size = dest_end - dest_begin;
 
-        CATALYST_DEBUG_ASSERT(dest_begin < dest_end), raiseEngineError({Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin, __FUNCTION__ }));
-        CATALYST_DEBUG_ASSERT(src_begin < src_end), raiseEngineError({Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
-        CATALYST_DEBUG_ASSERT(d_size >= s_size), raiseEngineError({Level::Error, "CatalystResult::Destination_Is_Smaller_Than_Source", CatalystResult::Destination_Is_Smaller_Than_Source, __FUNCTION__ }));
+        CATALYST_DEBUG_ASSERT(dest_begin < dest_end, raiseEngineError({Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin, __FUNCTION__ }));
+        CATALYST_DEBUG_ASSERT(src_begin < src_end, raiseEngineError({Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
+        CATALYST_DEBUG_ASSERT(d_size >= s_size, raiseEngineError({Level::Error, "CatalystResult::Destination_Is_Smaller_Than_Source", CatalystResult::Destination_Is_Smaller_Than_Source, __FUNCTION__ }));
 
         T* d_begin = (T*)dest_begin;
 
@@ -197,8 +207,8 @@ namespace Catalyst
     template<typename T>
     CATALYST_LOGIC_DISCARD static constexpr const T* find_first_of(const T* begin, const T* end, T&& delimiter)
     {
-        CATALYST_DEBUG_ASSERT(begin && end), raiseEngineError({ Level::Error, "CatalystResult::Pointer_Is_Nullptr", CatalystResult::Pointer_Is_Nullptr , __FUNCTION__ }));
-        CATALYST_DEBUG_ASSERT(begin < end), raiseEngineError({ Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
+        CATALYST_DEBUG_ASSERT(begin && end, raiseEngineError({ Level::Error, "CatalystResult::Pointer_Is_Nullptr", CatalystResult::Pointer_Is_Nullptr , __FUNCTION__ }));
+        CATALYST_DEBUG_ASSERT(begin < end, raiseEngineError({ Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
 
         while (begin != end)
         {
@@ -222,10 +232,10 @@ namespace Catalyst
     template<typename T>
     CATALYST_LOGIC_DISCARD static constexpr const T* find_first_of(const T* begin, const T* end, const T* delimiter_begin, const T* delimiter_end)
     {
-        CATALYST_DEBUG_ASSERT(begin && end && delimiter_begin && delimiter_end), raiseEngineError({ Level::Error, "CatalystResult::Pointer_Is_Nullptr", CatalystResult::Pointer_Is_Nullptr , __FUNCTION__ }));
+        CATALYST_DEBUG_ASSERT(begin && end && delimiter_begin && delimiter_end, raiseEngineError({ Level::Error, "CatalystResult::Pointer_Is_Nullptr", CatalystResult::Pointer_Is_Nullptr , __FUNCTION__ }));
 
-        CATALYST_DEBUG_ASSERT(begin < end), raiseEngineError({ Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
-        CATALYST_DEBUG_ASSERT(delimiter_begin < delimiter_end), raiseEngineError({ Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
+        CATALYST_DEBUG_ASSERT(begin < end, raiseEngineError({ Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
+        CATALYST_DEBUG_ASSERT(delimiter_begin < delimiter_end, raiseEngineError({ Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
 
         while (begin != end)
         {

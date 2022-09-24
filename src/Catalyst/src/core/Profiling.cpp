@@ -6,37 +6,45 @@
 
 namespace Catalyst
 {
-    std::shared_ptr<spdlog::logger> Profile::s_Logger;
+    std::shared_ptr<spdlog::logger> Profiler::s_Logger;
 
-    void Profile::initalize(const char* path, const char* pattern)
+    void Profiler::initalize(const char* path, const char* pattern)
     {
-        s_Logger = spdlog::basic_logger_mt("CATALYST_PROFILE_LOGGER", path);
+        s_Logger = spdlog::basic_logger_mt("CATALYST_PROFILE_LOGGER", path, true);
 
         if (pattern)
             s_Logger->set_pattern(pattern);
+
+#ifdef CATALYST_PROFILE_LOG_CSV
+        s_Logger->info("\"Tick Index\",\"Function\",\"Time NS\"");
+#endif
     }
-    Profile::Profile(const char* name)
+    Profiler::Profiler(const char* name)
         : m_Name(name)
     {
     }
-    Profile::~Profile()
+    Profiler::~Profiler()
     {
     }
-    void Profile::start()
+    void Profiler::start()
     {
         m_Start = clock::now();
     }
-    void Profile::stop()
+    void Profiler::stop()
     {
         m_Stop = clock::now();
     }
-    auto Profile::count()
+    auto Profiler::count()
     {
         return (m_Stop - m_Start).count();
     }
-    void Profile::log()
+    void Profiler::log()
     {
-        s_Logger->info("[FUNCTION - {0}] | Profile result : {1}", m_Name, this->count());
+#ifdef CATALYST_PROFILE_LOG_CSV
+        s_Logger->info("\"{0}\",\"{1}\",\"{2}\"", CatalystGetCycleIndex(), m_Name, this->count());
+#else
+        s_Logger->info("[Function - {0}] - {1}", m_Name, this->count());
+#endif
     }
     ProfileFunction::ProfileFunction(const char* function_name, size_t* result)
         : m_Profile(function_name), m_Result(result)

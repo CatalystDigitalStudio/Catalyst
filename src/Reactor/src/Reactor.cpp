@@ -5,11 +5,20 @@
 
 #include "Reactor.h"
 
+#include <future>
+
 CATALYST_LAUNCH(Reactor);
 
 void ReactorErrorHandler(Catalyst::CatalystError&& error)
 {
     CATALYST_LOG_ERROR(error.message);
+}
+
+void disision()
+{
+    CATALYST_LOG_INFO("Press any key to exit...");
+    getc(stdin);
+    Catalyst::IApplication::Get()->Close(true);
 }
 
 Reactor::Reactor()
@@ -23,27 +32,14 @@ Reactor::~Reactor()
 void Reactor::Run()
 {
 
-    const char buffer[] = "Hello world!";
-    const char delim[] = "or";
-
-    {
-        CATALYST_PROFILE_FUNCTION(nullptr);
-        auto result = Catalyst::find_first_of(&buffer[0], &buffer[sizeof(buffer)], &delim[0], &delim[sizeof(delim)]);
-    }
-
+    auto f = std::async(disision);
 
     while (!Close())
     {
-        char c = getc(stdin);
-
-        switch (c)
-        {
-        case 'r':
-            Catalyst::CatalystApplicationReload();
-        case 'x':
-            return;
-        default:
-            ;
-        }
+        Catalyst::CatalystUpdate();
     }
+
+    f.wait();
+
+    CATALYST_LOG_INFO("Allocation : {0}", Catalyst::CatalystGetAllocationAmount());
 }

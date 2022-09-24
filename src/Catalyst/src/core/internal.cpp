@@ -21,6 +21,9 @@ namespace Catalyst
 
     static std::atomic<CatalystError> catalyst_s_EngineError;
     static std::atomic<CatalystErrorHandler> catalyst_s_EngineErrorHandler = std::atomic<CatalystErrorHandler>(catalyst_s_DefaultHandler);
+    static std::atomic_size_t catalyst_s_TickIndex = 0;
+    static std::atomic_size_t catalyst_s_Allocations = 0;
+    static std::atomic_size_t catalyst_s_AllocationsSize = 0;
 
     enum class CatalystArguments
     {
@@ -100,8 +103,16 @@ namespace Catalyst
             Catalyst::Logger::addCoreFile("catalyst_core_logger", location.c_str());
         }
 
-        Catalyst::Profile::initalize(profile_location.c_str());
+        Catalyst::Profiler::initalize(profile_location.c_str());
 
+    }
+    void CatalystUpdate()
+    {
+        catalyst_s_TickIndex.store(catalyst_s_TickIndex + 1);
+    }
+    size_t CatalystGetCycleIndex()
+    {
+        return catalyst_s_TickIndex.load();
     }
     void raiseEngineError(CatalystError&& error)
     {
@@ -113,4 +124,66 @@ namespace Catalyst
     {
         return catalyst_s_EngineError.load();
     }
+
+    size_t CatalystGetAllocations()
+    {
+        return catalyst_s_Allocations.load();
+    }
+    size_t CatalystGetAllocationAmount()
+    {
+        return catalyst_s_AllocationsSize.load();
+    }
+
+    namespace internal
+    {
+        static void CatalystAddAllocation(size_t amount) noexcept
+        {
+            catalyst_s_Allocations.store(catalyst_s_Allocations + 1);
+            catalyst_s_AllocationsSize.store(catalyst_s_AllocationsSize + amount);
+        }
+        static void CatalystRemoveAllocation(size_t amount) noexcept
+        {
+            catalyst_s_Allocations.store(catalyst_s_Allocations - 1);
+            catalyst_s_AllocationsSize.store(catalyst_s_AllocationsSize - amount);
+        }
+    }
+}
+
+CATALYST_LOGIC_DISCARD void* operator new(std::size_t size)
+{
+    CATALYST_ASSERT(size < ~size_t(), throw);
+
+    void* ptr = malloc(size);
+
+    if (!ptr)
+        throw;
+
+    Catalyst::internal::CatalystAddAllocation(size);
+
+    return ptr;
+}
+CATALYST_LOGIC_DISCARD void* operator new[](std::size_t size)
+{
+    CATALYST_ASSERT(size < ~size_t(), throw);
+
+    void* ptr = malloc(size);
+
+    Catalyst::internal::CatalystAddAllocation(size);
+
+    if (!ptr)
+        throw;
+
+    Catalyst::CatalystGetAllocations();
+
+    return ptr;
+}
+void operator delete(void* ptr) noexcept
+{
+    Catalyst::internal::CatalystRemoveAllocation(_msize(ptr));
+    free(ptr);
+}
+void operator delete[](void* ptr) noexcept
+{
+    Catalyst::internal::CatalystRemoveAllocation(_msize(ptr));
+    free(ptr);
 }

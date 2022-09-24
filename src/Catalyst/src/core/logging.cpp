@@ -51,6 +51,8 @@ namespace Catalyst
         Catalyst::Logger::addConsole();
         Catalyst::Logger::addCoreConsole();
 #endif
+
+        spdlog::set_automatic_registration(true);
     }
     void Logger::cleanup()
     {

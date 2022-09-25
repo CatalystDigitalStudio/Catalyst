@@ -148,6 +148,10 @@
       <Project>{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\translation.json" />
+    <None Include="log\example.json" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

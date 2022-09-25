@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>phc.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>STBTT_STATIC;CATALYST_DEBUG;DEBUG;CATALYST_PROFILE_LOG_CSV;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>STBTT_STATIC;CATALYST_DEBUG;DEBUG;CATALYST_PROFILE_LOG_CSV;CATALYST_CORE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;external\spdlog\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -141,6 +141,7 @@
     <ClInclude Include="include\Catalyst.h" />
     <ClInclude Include="src\core\application.h" />
     <ClInclude Include="src\core\entry.h" />
+    <ClInclude Include="src\core\parsing.h" />
     <ClInclude Include="src\core\internal.h" />
     <ClInclude Include="src\core\logging.h" />
     <ClInclude Include="src\core\profiling.h" />
@@ -152,7 +153,9 @@
     <ClCompile Include="src\core\application.cpp" />
     <ClCompile Include="src\core\internal.cpp" />
     <ClCompile Include="src\core\logging.cpp" />
+    <ClCompile Include="src\core\parsing.cpp" />
     <ClCompile Include="src\core\profiling.cpp" />
+    <ClCompile Include="src\core\unicode.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

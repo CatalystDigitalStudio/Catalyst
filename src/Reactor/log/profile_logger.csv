@@ -1,2 +1,3 @@
-"Tick ID","Function","Time NS"
-"19059686","Catalyst::CatalystApplicationLaunch","1005428800"
+"Tick Index","Function","Time NS"
+"143169050","Reactor::Run","18974781200"
+"143169050","Catalyst::CatalystApplicationLaunch","18976109700"

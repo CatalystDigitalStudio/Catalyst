@@ -1,5 +1,6 @@
 #pragma once
 
+#include "logging.h"
 #include "internal.h"
 #include "type_traits.h"
 

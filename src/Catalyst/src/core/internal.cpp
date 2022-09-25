@@ -149,6 +149,8 @@ namespace Catalyst
     }
 }
 
+#if CATALYST_TRACK_ALLOCATIONS
+
 CATALYST_LOGIC_DISCARD void* operator new(std::size_t size)
 {
     CATALYST_ASSERT(size < ~size_t(), throw);
@@ -187,3 +189,4 @@ void operator delete[](void* ptr) noexcept
     Catalyst::internal::CatalystRemoveAllocation(_msize(ptr));
     free(ptr);
 }
+#endif

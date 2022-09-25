@@ -6,6 +6,8 @@
 #include "Reactor.h"
 
 #include <future>
+#include <fstream>
+#include <streambuf>
 
 CATALYST_LAUNCH(Reactor);
 
@@ -17,7 +19,7 @@ void ReactorErrorHandler(Catalyst::CatalystError&& error)
 void disision()
 {
     CATALYST_LOG_INFO("Press any key to exit...");
-    getc(stdin);
+    auto result = getc(stdin);
     Catalyst::IApplication::Get()->Close(true);
 }
 
@@ -31,6 +33,7 @@ Reactor::~Reactor()
 }
 void Reactor::Run()
 {
+    CATALYST_PROFILE_FUNCTION(nullptr);
 
     auto f = std::async(disision);
 

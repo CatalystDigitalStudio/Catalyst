@@ -37,6 +37,7 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\core\profiling.h" />
+    <ClInclude Include="src\core\parsing.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\application.cpp">
@@ -52,5 +53,7 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\core\profiling.cpp" />
+    <ClCompile Include="src\core\unicode.cpp" />
+    <ClCompile Include="src\core\parsing.cpp" />
   </ItemGroup>
 </Project>

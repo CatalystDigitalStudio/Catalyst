@@ -96,6 +96,14 @@ namespace Catalyst
         Commandline_Argument_Unknown    = 0b00000000'00000000'00000010'00000000,
         Commandline_Argument_Malformed  = 0b00000000'00000000'00000010'00000100,
 
+        Json_Object_Missing_Bracket            = 0b00000000'00000000'00001000'00000000,
+        Json_Vector_Missing_Bracket            = 0b00000000'00000000'00001000'00000001,
+        Json_String_Missing_Quotation_Mark     = 0b00000000'00000000'00001000'00000010,
+        Json_Key_Missing_Quotation_Mark        = 0b00000000'00000000'00001000'00000010,
+
+        Utf8_Codepoint_Malformed             = 0b00000000'00000000'00000100'00000000,
+        Utf8_Codepoint_Found_Unexpected_Byte = 0b00000000'00000000'00000100'00000001,
+
         IApplication_Unspecified        = 0b00000000'00000000'10000000'00000001,
         IApplication_Failed_Creation    = 0b00000000'00000000'10000000'00000010,
         IApplication_Recreation_Request = 0b00000000'00000000'10000000'00000100,

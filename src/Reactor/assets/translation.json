@@ -1,0 +1,25 @@
+﻿{
+  "languages": [
+    "de_DE",
+    "en_US",
+    "pl_PL"
+  ],
+  "de_DE": {
+    "welcome": {
+      "title": "Titel",
+      "home": "Startseite"
+    }
+  },
+  "en_US": {
+    "welcome": {
+      "title": "Title",
+      "home": "Homepage"
+    }
+  },
+  "pl_PL": {
+    "welcome": {
+      "title": "Tytuł",
+      "home": "Strona główna"
+    }
+  }
+}

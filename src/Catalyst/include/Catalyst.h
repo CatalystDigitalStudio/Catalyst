@@ -4,4 +4,6 @@
 #include "../src/core/application.h"
 
 #include "../src/core/unicode.h"
-#include "../src/core/parsing.h"
+
+#include "../src/files/file.h"
+#include "../src/files/parsing.h"

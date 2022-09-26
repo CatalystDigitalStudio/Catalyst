@@ -24,7 +24,7 @@ namespace Catalyst
             }
             else if (length == 1)
             {
-                raiseEngineError({ Level::Warning, "CatalystResult::Utf8_Codepoint_Found_Unexpected_Byte", CatalystResult::Utf8_Codepoint_Found_Unexpected_Byte, __FUNCTION__ });
+                Engine::raiseError({ Level::Warning, "CatalystResult::Utf8_Codepoint_Found_Unexpected_Byte", CatalystResult::Utf8_Codepoint_Found_Unexpected_Byte, __FUNCTION__ });
                 return 0;
             }
             else if (length == 2)
@@ -41,12 +41,12 @@ namespace Catalyst
             }
             else if (length == 5)
             {
-                raiseEngineError({ Level::Warning, "CatalystResult::Utf8_Codepoint_Malformed", CatalystResult::Utf8_Codepoint_Malformed, __FUNCTION__ });
+                Engine::raiseError({ Level::Warning, "CatalystResult::Utf8_Codepoint_Malformed", CatalystResult::Utf8_Codepoint_Malformed, __FUNCTION__ });
                 return -1;
             }
             else
             {
-                raiseEngineError({ Level::Warning, "CatalystResult::Utf8_Codepoint_Malformed", CatalystResult::Utf8_Codepoint_Malformed, __FUNCTION__ });
+                Engine::raiseError({ Level::Warning, "CatalystResult::Utf8_Codepoint_Malformed", CatalystResult::Utf8_Codepoint_Malformed, __FUNCTION__ });
                 return -1;
             }
         }

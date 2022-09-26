@@ -19,11 +19,11 @@ namespace Catalyst
         }
     }
 
-    static std::atomic<CatalystError> catalyst_s_EngineError;
-    static std::atomic<CatalystErrorHandler> catalyst_s_EngineErrorHandler = std::atomic<CatalystErrorHandler>(catalyst_s_DefaultHandler);
-    static std::atomic_size_t catalyst_s_TickIndex = 0;
-    static std::atomic_size_t catalyst_s_Allocations = 0;
-    static std::atomic_size_t catalyst_s_AllocationsSize = 0;
+    std::atomic<CatalystError>                                           Engine::catalyst_s_EngineError;
+    std::atomic<CatalystErrorHandler>                                    Engine::catalyst_s_EngineErrorHandler = std::atomic<CatalystErrorHandler>(catalyst_s_DefaultHandler);
+    std::atomic_size_t                                                   Engine::catalyst_s_TickIndex = 0;
+    std::atomic_size_t                                                   Engine::catalyst_s_Allocations = 0;
+    std::atomic_size_t                                                   Engine::catalyst_s_AllocationsSize = 0;
 
     enum class CatalystArguments
     {
@@ -41,11 +41,11 @@ namespace Catalyst
         std::vector<std::string> result;
 
         size_t start = arguments.find('{');
-        size_t end   = arguments.find('}');
+        size_t end = arguments.find('}');
 
         if (start == arguments.npos || end == arguments.npos)
         {
-            raiseEngineError({ Level::Error, "CatalystResult::Commandline_Argument_Malformed", CatalystResult::Commandline_Argument_Malformed, __FUNCTION__ });
+            Engine::raiseError({ Level::Error, "CatalystResult::Commandline_Argument_Malformed", CatalystResult::Commandline_Argument_Malformed, __FUNCTION__ });
         }
 
         ++start;
@@ -53,12 +53,12 @@ namespace Catalyst
         std::string buffer = "";
         size_t last = start, next = start;
 
-        
+
         while ((next = arguments.find(',', last)) != arguments.npos)
         {
             buffer = arguments.substr(last, next - last);
             result.emplace_back(buffer);
-            last = next+1;
+            last = next + 1;
         }
 
         buffer = arguments.substr(last, end - last);
@@ -67,12 +67,12 @@ namespace Catalyst
         return result;
     }
 
-    void CatalystSetErrorHandler(CatalystErrorHandler handler)
-    {
-        catalyst_s_EngineErrorHandler.store(handler);
-    }
 
-    void CatalystInitalizeEngine(int argc, char** argv, char** envp)
+    ///==========================================================================================
+    ///  Engine
+    ///==========================================================================================
+
+    void Engine::initalizeEngine(int argc, char** argv, char** envp)
     {
         Catalyst::Logger::initalizeDefault();
 
@@ -93,7 +93,7 @@ namespace Catalyst
             }
             else
             {
-                raiseEngineError({ Level::Warning, "CatalystResult::Commandline_Argument_Unknown", CatalystResult::Commandline_Argument_Unknown , __FUNCTION__ });
+                raiseError({ Level::Warning, "CatalystResult::Commandline_Argument_Unknown", CatalystResult::Commandline_Argument_Unknown , __FUNCTION__ });
             }
         }
 
@@ -106,46 +106,84 @@ namespace Catalyst
         Catalyst::Profiler::initalize(profile_location.c_str());
 
     }
-    void CatalystUpdate()
+
+    void Engine::updateEngine()
     {
         catalyst_s_TickIndex.store(catalyst_s_TickIndex + 1);
     }
-    size_t CatalystGetCycleIndex()
+
+    const char* const Engine::getVersion()
+    {
+        return CATALYST_VERSION;
+    }
+    const unsigned char Engine::getMajorVersion()
+    {
+        return CATALYST_MAJOR;
+    }
+    const unsigned char Engine::getMinorVersion()
+    {
+        return CATALYST_MINOR;
+    }
+    const unsigned char Engine::getPatchVersion()
+    {
+        return CATALYST_PATCH;
+    }
+
+    ///==========================================================================================
+    ///  Object creation
+    ///==========================================================================================
+    
+
+    IRenderer* Engine::launchRenderer(unsigned int type)
+    {
+        return nullptr;
+    }
+
+    ///==========================================================================================
+    ///  Statistics and Profiling
+    ///==========================================================================================
+
+    size_t Engine::getTickCount()
     {
         return catalyst_s_TickIndex.load();
     }
-    void raiseEngineError(CatalystError&& error)
+
+
+    size_t Engine::getAllocations()
+    {
+        return catalyst_s_Allocations.load();
+    }
+    size_t Engine::getAllocationAmount()
+    {
+        return catalyst_s_AllocationsSize.load();
+    }
+    void Engine::addAllocation(size_t amount) noexcept
+    {
+        catalyst_s_Allocations.store(catalyst_s_Allocations + 1);
+        catalyst_s_AllocationsSize.store(catalyst_s_AllocationsSize + amount);
+    }
+    void Engine::removeAllocation(size_t amount) noexcept
+    {
+        catalyst_s_Allocations.store(catalyst_s_Allocations - 1);
+        catalyst_s_AllocationsSize.store(catalyst_s_AllocationsSize - amount);
+    }
+
+    ///==========================================================================================
+    ///  CATALYST ERRORS
+    ///==========================================================================================
+    void Engine::setErrorHandler(CatalystErrorHandler handler)
+    {
+        catalyst_s_EngineErrorHandler.store(handler);
+    }
+    void Engine::raiseError(CatalystError&& error)
     {
         auto future = std::async(std::launch::async, catalyst_s_EngineErrorHandler.load(), error);
 
         catalyst_s_EngineError.store(error);
     }
-    CatalystError getLastEgineError()
+    CatalystError Engine::getLastError()
     {
         return catalyst_s_EngineError.load();
-    }
-
-    size_t CatalystGetAllocations()
-    {
-        return catalyst_s_Allocations.load();
-    }
-    size_t CatalystGetAllocationAmount()
-    {
-        return catalyst_s_AllocationsSize.load();
-    }
-
-    namespace internal
-    {
-        static void CatalystAddAllocation(size_t amount) noexcept
-        {
-            catalyst_s_Allocations.store(catalyst_s_Allocations + 1);
-            catalyst_s_AllocationsSize.store(catalyst_s_AllocationsSize + amount);
-        }
-        static void CatalystRemoveAllocation(size_t amount) noexcept
-        {
-            catalyst_s_Allocations.store(catalyst_s_Allocations - 1);
-            catalyst_s_AllocationsSize.store(catalyst_s_AllocationsSize - amount);
-        }
     }
 }
 
@@ -160,7 +198,7 @@ CATALYST_LOGIC_DISCARD void* operator new(std::size_t size)
     if (!ptr)
         throw;
 
-    Catalyst::internal::CatalystAddAllocation(size);
+    Catalyst::Engine::addAllocation(size);
 
     return ptr;
 }
@@ -170,7 +208,7 @@ CATALYST_LOGIC_DISCARD void* operator new[](std::size_t size)
 
     void* ptr = malloc(size);
 
-    Catalyst::internal::CatalystAddAllocation(size);
+    Catalyst::Engine::addAllocation(size);
 
     if (!ptr)
         throw;
@@ -181,12 +219,12 @@ CATALYST_LOGIC_DISCARD void* operator new[](std::size_t size)
 }
 void operator delete(void* ptr) noexcept
 {
-    Catalyst::internal::CatalystRemoveAllocation(_msize(ptr));
+    Catalyst::Engine::removeAllocation(_msize(ptr));
     free(ptr);
 }
 void operator delete[](void* ptr) noexcept
 {
-    Catalyst::internal::CatalystRemoveAllocation(_msize(ptr));
+    Catalyst::Engine::removeAllocation(_msize(ptr));
     free(ptr);
 }
 #endif

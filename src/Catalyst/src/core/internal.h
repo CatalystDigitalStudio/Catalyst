@@ -1,8 +1,17 @@
 #pragma once
 
-///----------------------------------------------
-/// CATALYST CPP VERSION DEFINITIONS AND LOGIC
-///----------------------------------------------
+///==========================================================================================
+///  CATALYST CPP VERSION DEFINITIONS AND LOGIC
+///==========================================================================================
+
+#define CATALYST_MAJOR 0
+#define CATALYST_MINOR 0
+#define CATALYST_PATCH 1
+
+#define CATALYST_MACRO_STRING(value) #value
+#define CATALYST_CREATE_VERSION(MAJOR, MINOR, PATCH) CATALYST_MACRO_STRING(MAJOR) "." CATALYST_MACRO_STRING(MINOR) "." CATALYST_MACRO_STRING(PATCH)
+#define CATALYST_VERSION CATALYST_CREATE_VERSION(CATALYST_MAJOR, CATALYST_MINOR, CATALYST_PATCH)
+
 #define CATALYST_CPP_VERSION_14 201402L
 #define CATALYST_CPP_VERSION_17 201703L
 #define CATALYST_CPP_VERSION_20 202002L
@@ -15,9 +24,9 @@
 
 #define CATALYST_IS_CPP_VERSION_GREATER(VERSION) (CATALYST_CPP_VERSION >= VERSION)
 
-///----------------------------------------------
-/// CATALYST CPP HELPER DEFINITIONS
-///----------------------------------------------
+///==========================================================================================
+///  CATALYST CPP HELPER DEFINITIONS
+///==========================================================================================
 
 #if CATALYST_IS_CPP_VERSION_GREATER( CATALYST_CPP_VERSION_20 )
     #define CATALYST_LOGIC_DISCARD [[nodiscard]]
@@ -69,6 +78,7 @@
 ///----------------------------------------------
 
 #include <mutex>
+#include "type_traits.h"
 
 #ifndef CATALYST_HEADER_INTERNAL
 #define CATALYST_HEADER_INTERNAL
@@ -131,47 +141,111 @@ namespace Catalyst
         std::mutex m_Mutex;
     };
 
-    ///==========================================================================================
-    ///  CATALYST ERRORS
-    ///==========================================================================================
-    
     typedef void (*CatalystErrorHandler)(CatalystError&&);
 
-    /**
-     * Set a custom error handler.
-     * 
-     * @param handler - custom handler function (Cannot be a class function, namespace is premitted)
-     */
-    extern void CatalystSetErrorHandler(CatalystErrorHandler handler);
+    class IRenderer;
 
-    /**
-     * Sets a new error message to be handled.
-     *
-     * @param error - error information to pass on
-     */
-    extern void raiseEngineError(CatalystError&& error);
+    class Engine
+    {
 
-    /**
-     * Gets the last raised error.
-     */
-    CATALYST_LOGIC_DISCARD extern CatalystError getLastEgineError();
+    public:
 
-    /**
-     * Initalizes the engine using the provided arguments from the command-line and OS envioment.
-     * 
-     * @param argc - number of arguments
-     * @param argv - pointer to list of arguments
-     * @param envp - pointer to list of envioment varables
-     */
-    extern void CatalystInitalizeEngine(int argc, char** argv, char** envp);
+        ///==========================================================================================
+        ///  Engine
+        ///==========================================================================================
 
-    extern void CatalystUpdate();
+        /**
+         * Initalizes the engine using the provided arguments from the command-line and OS envioment.
+         *
+         * @param argc - number of arguments
+         * @param argv - pointer to list of arguments
+         * @param envp - pointer to list of envioment varables
+         */
+        static void initalizeEngine(int argc, char** argv, char** envp);
 
-    extern size_t CatalystGetCycleIndex();
+        /**
+         * Updates the engine tick and any other functions.
+         */
+        static void updateEngine();
 
-    extern size_t CatalystGetAllocations();
+        /**
+         * Get the engine version as a string (Ex. "x.x.x").
+         * 
+         * @see https://semver.org/
+         * 
+         * \return string - version
+         */
+        static const char* const getVersion();
 
-    extern size_t CatalystGetAllocationAmount();
+        /**
+         * Get the major release version.
+         * 
+         * \return version major
+         */
+        static const unsigned char getMajorVersion();
+        /**
+         * Get the minor release version.
+         *
+         * \return version minor
+         */
+        static const unsigned char getMinorVersion();
+        /**
+         * Get the patch version.
+         *
+         * \return version patch
+         */
+        static const unsigned char getPatchVersion();
+
+        ///==========================================================================================
+        ///  Object creation
+        ///==========================================================================================
+        static IRenderer* launchRenderer(unsigned int type);
+
+        ///==========================================================================================
+        ///  Statistics and Profiling
+        ///==========================================================================================
+        static size_t getTickCount();
+
+        static size_t getAllocations();
+
+        static size_t getAllocationAmount();
+
+    private:
+        static void addAllocation(size_t amount) noexcept;
+        static void removeAllocation(size_t amount) noexcept;
+
+    public:
+        ///==========================================================================================
+        ///  CATALYST ERRORS
+        ///==========================================================================================
+
+        /**
+         * Set a custom error handler.
+         *
+         * @param handler - custom handler function (Cannot be a class function, namespace is premitted)
+         */
+        static void setErrorHandler(CatalystErrorHandler handler);
+
+        /**
+         * Sets a new error message to be handled.
+         *
+         * @param error - error information to pass on
+         */
+        static void raiseError(CatalystError&& error);
+
+        /**
+         * Gets the last raised error.
+         */
+        CATALYST_LOGIC_DISCARD static CatalystError getLastError();
+
+    private:
+        static std::atomic<CatalystError> catalyst_s_EngineError;
+        static std::atomic<CatalystErrorHandler> catalyst_s_EngineErrorHandler;
+        static std::atomic_size_t catalyst_s_TickIndex;
+        static std::atomic_size_t catalyst_s_Allocations;
+        static std::atomic_size_t catalyst_s_AllocationsSize;
+
+    };
 
 
     /**
@@ -183,26 +257,7 @@ namespace Catalyst
      * \param src_end    - source buffer end
      */
     template<typename T>
-    static constexpr void copy(const T* dest_begin, const T* dest_end, const T* src_begin, const T* src_end)
-    {
-        CATALYST_DEBUG_ASSERT(dest_begin && dest_end && src_begin && src_end, raiseEngineError({ Level::Error, "CatalystResult::Pointer_Is_Nullptr", CatalystResult::Pointer_Is_Nullptr , __FUNCTION__ }));
-
-        const size_t s_size = src_end - src_begin;
-        const size_t d_size = dest_end - dest_begin;
-
-        CATALYST_DEBUG_ASSERT(dest_begin < dest_end, raiseEngineError({Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin, __FUNCTION__ }));
-        CATALYST_DEBUG_ASSERT(src_begin < src_end, raiseEngineError({Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
-        CATALYST_DEBUG_ASSERT(d_size >= s_size, raiseEngineError({Level::Error, "CatalystResult::Destination_Is_Smaller_Than_Source", CatalystResult::Destination_Is_Smaller_Than_Source, __FUNCTION__ }));
-
-        T* d_begin = (T*)dest_begin;
-
-        while (src_begin != src_end)
-        {
-            *d_begin = *src_begin;
-            ++d_begin;
-            ++src_begin;
-        }
-    }
+    static constexpr void copy(const T* dest_begin, const T* dest_end, const T* src_begin, const T* src_end);
 
     /**
      * First the first occurance of the delimiter in a buffer.
@@ -213,21 +268,8 @@ namespace Catalyst
      * \return - pointer to location in buffer, or null if not found
      */
     template<typename T>
-    CATALYST_LOGIC_DISCARD static constexpr const T* find_first_of(const T* begin, const T* end, T&& delimiter)
-    {
-        CATALYST_DEBUG_ASSERT(begin && end, raiseEngineError({ Level::Error, "CatalystResult::Pointer_Is_Nullptr", CatalystResult::Pointer_Is_Nullptr , __FUNCTION__ }));
-        CATALYST_DEBUG_ASSERT(begin < end, raiseEngineError({ Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
+    CATALYST_LOGIC_DISCARD static constexpr const T* find_first_of(const T* begin, const T* end, T&& delimiter);
 
-        while (begin != end)
-        {
-            if (*begin == delimiter)
-                return begin;
-            else
-                ++begin;
-        }
-
-        return nullptr;
-    }
     /**
      * First the first occurance of the delimiter buffer in a different buffer.
      * 
@@ -238,41 +280,10 @@ namespace Catalyst
      * \return pointer to start of location in search buffer, or null if not found
      */
     template<typename T>
-    CATALYST_LOGIC_DISCARD static constexpr const T* find_first_of(const T* begin, const T* end, const T* delimiter_begin, const T* delimiter_end)
-    {
-        CATALYST_DEBUG_ASSERT(begin && end && delimiter_begin && delimiter_end, raiseEngineError({ Level::Error, "CatalystResult::Pointer_Is_Nullptr", CatalystResult::Pointer_Is_Nullptr , __FUNCTION__ }));
-
-        CATALYST_DEBUG_ASSERT(begin < end, raiseEngineError({ Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
-        CATALYST_DEBUG_ASSERT(delimiter_begin < delimiter_end, raiseEngineError({ Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
-
-        while (begin != end)
-        {
-            if (*begin == *delimiter_begin)
-            {
-                const T* b_index = begin;
-                bool found = true;
-                for (const T* i = delimiter_begin; i != (delimiter_end - 1); i++, begin++)
-                {
-                    if (*i != *begin)
-                    {
-                        found = false;
-                         break;
-                    }
-                }
-                if (found)
-                {
-                    return b_index;
-                }
-            }
-            else
-            {
-                ++begin;
-            }
-        }
-
-        return nullptr;
-    }
+    CATALYST_LOGIC_DISCARD static constexpr const T* find_first_of(const T* begin, const T* end, const T* delimiter_begin, const T* delimiter_end);
 
 }
+
+#include "internal.inl"
 
 #endif //CATALYEST_HEADER_INTERNAL

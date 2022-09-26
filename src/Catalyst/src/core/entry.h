@@ -19,7 +19,7 @@ namespace Catalyst
 int main(int argc, char** argv, char** envp)
 {
 
-    Catalyst::CatalystInitalizeEngine(argc, argv, envp);
+    Catalyst::Engine::initalizeEngine(argc, argv, envp);
 
 START:
 

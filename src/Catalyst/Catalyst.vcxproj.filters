@@ -37,7 +37,13 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\core\profiling.h" />
-    <ClInclude Include="src\core\parsing.h" />
+    <ClInclude Include="src\files\parsing.h" />
+    <ClInclude Include="src\files\file.h" />
+    <ClInclude Include="src\graphic\image.h" />
+    <ClInclude Include="src\graphic\font.h" />
+    <ClInclude Include="src\graphic\surface.h" />
+    <ClInclude Include="src\graphic\renderer.h" />
+    <ClInclude Include="src\core\version.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\application.cpp">
@@ -54,6 +60,11 @@
     </ClCompile>
     <ClCompile Include="src\core\profiling.cpp" />
     <ClCompile Include="src\core\unicode.cpp" />
-    <ClCompile Include="src\core\parsing.cpp" />
+    <ClCompile Include="src\files\parsing.cpp" />
+    <ClCompile Include="src\files\file.cpp" />
+    <ClCompile Include="src\graphic\image.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\core\internal.inl" />
   </ItemGroup>
 </Project>

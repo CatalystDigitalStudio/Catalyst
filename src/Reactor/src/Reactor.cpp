@@ -26,7 +26,7 @@ void disision()
 Reactor::Reactor()
     : Catalyst::IApplication("Reactor")
 {
-    Catalyst::CatalystSetErrorHandler(ReactorErrorHandler);
+    Catalyst::Engine::setErrorHandler(ReactorErrorHandler);
 }
 Reactor::~Reactor()
 {
@@ -35,14 +35,16 @@ void Reactor::Run()
 {
     CATALYST_PROFILE_FUNCTION(nullptr);
 
+    const char* const version = Catalyst::Engine::getVersion();
+
     auto f = std::async(disision);
 
     while (!Close())
     {
-        Catalyst::CatalystUpdate();
+        Catalyst::Engine::updateEngine();
     }
 
     f.wait();
 
-    CATALYST_LOG_INFO("Allocation : {0}", Catalyst::CatalystGetAllocationAmount());
+    CATALYST_LOG_INFO("Allocation : {0}", Catalyst::Engine::getAllocationAmount());
 }

@@ -20,7 +20,7 @@ namespace Catalyst
         static void initalize(const char* path, const char* pattern = "%v");
 
     private:
-        friend void CatalystInitalizeEngine(int argc, char** argv, char** envp);
+        friend class Engine;
 
     public:
         using clock = std::chrono::high_resolution_clock;

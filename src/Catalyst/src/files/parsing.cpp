@@ -15,17 +15,17 @@ namespace Catalyst
 
             CATALYST_CORE_INFO("Json Parser Error [Missing brackets] : {0} - {1}", std::count(data.begin(), data.end(), '{'), std::count(data.begin(), data.end(), '}'));
 
-            raiseEngineError({Level::Error, "CatalystResult::Json_Object_Missing_Bracket", CatalystResult::Json_Object_Missing_Bracket, __FUNCTION__}); ///TODO
+            Engine::raiseError({Level::Error, "CatalystResult::Json_Object_Missing_Bracket", CatalystResult::Json_Object_Missing_Bracket, __FUNCTION__}); ///TODO
             return (*this);
         }
         if ((std::count(data.begin(), data.end(), '"') % 2) != 0)
         {
-            raiseEngineError({}); ///TODO
+            Engine::raiseError({}); ///TODO
             return (*this);
         }
         if ((std::count(data.begin(), data.end(), '[') - std::count(data.begin(), data.end(), ']')) != 0)
         {
-            raiseEngineError({}); ///TODO
+            Engine::raiseError({}); ///TODO
             return (*this);
         }
 
@@ -58,14 +58,14 @@ namespace Catalyst
             prev = data.find_first_of('"', prev+1);
             if (prev == data.npos)
             {
-                raiseEngineError({}); ///TODO
+                Engine::raiseError({}); ///TODO
                 return (*this);
             }
 
             next = data.find_first_of('"', prev+1);
             if (next == data.npos)
             {
-                raiseEngineError({}); ///TODO
+                Engine::raiseError({}); ///TODO
                 return (*this);
             }
 
@@ -84,7 +84,7 @@ namespace Catalyst
                 next = data.find_first_of('"', prev+1);
                 if (next == data.npos)
                 {
-                    raiseEngineError({}); ///TODO
+                    Engine::raiseError({}); ///TODO
                     return (*this);
                 }
 
@@ -100,7 +100,7 @@ namespace Catalyst
 
                 if (next == data.size())
                 {
-                    raiseEngineError({}); ///TODO
+                    Engine::raiseError({}); ///TODO
                     return (*this);
                 }
 
@@ -116,7 +116,7 @@ namespace Catalyst
 
                 if (next == data.size())
                 {
-                    raiseEngineError({}); ///TODO
+                    Engine::raiseError({}); ///TODO
                     return (*this);
                 }
 
@@ -133,7 +133,7 @@ namespace Catalyst
 
                 if (next == data.npos)
                 {
-                    raiseEngineError({}); ///TODO
+                    Engine::raiseError({}); ///TODO
                     return (*this);
                 }
 
@@ -222,7 +222,7 @@ namespace Catalyst
 
             if (next == data.size())
             {
-                raiseEngineError({}); ///TODO
+                Engine::raiseError({}); ///TODO
                 return std::vector<json>({ json() });
             }
 
@@ -242,13 +242,13 @@ namespace Catalyst
     }
 
 
-    csv& csv::construct(std::string data, Direction direction)
+    csv& csv::construct(std::string data)
     {
-        //if ((std::count(data.begin(), data.end(), ',') % 2) != 1 && std::count(data.begin/(),/ data.end(), ','))
-        //{
-        //    raiseEngineError({});
-        //    return (*this);
-        //}
+        if (!std::count(data.begin(), data.end(), ','))
+        {
+            Engine::raiseError({});
+            return (*this);
+        }
 
         //================================================
         // Clean Data
@@ -283,7 +283,7 @@ namespace Catalyst
 
             if (items.size() > keys.size()) //Elements must match, otherwise data set is ill-formed
             {
-                raiseEngineError({});
+                Engine::raiseError({});
                 return (*this);
             }
 

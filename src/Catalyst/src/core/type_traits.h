@@ -16,7 +16,7 @@ namespace Catalyst
     template<bool Value>
     using CatalystBool = Constant<bool, Value>;
 
-    using catalyst_true  = CatalystBool<true>;
+    using catalyst_true = CatalystBool<true>;
     using catalyst_false = CatalystBool<false>;
 
     template<typename Base, typename Derived>
@@ -37,6 +37,7 @@ namespace Catalyst
     {
         using type = T;
     };
+
 }
 
 #endif //CATALYST_HEADER_TRAITS

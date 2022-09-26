@@ -41,7 +41,7 @@ namespace Catalyst
     void Profiler::log()
     {
 #ifdef CATALYST_PROFILE_LOG_CSV
-        s_Logger->info("\"{0}\",\"{1}\",\"{2}\"", CatalystGetCycleIndex(), m_Name, this->count());
+        s_Logger->info("\"{0}\",\"{1}\",\"{2}\"", Engine::getTickCount(), m_Name, this->count());
 #else
         s_Logger->info("[Function - {0}] - {1}", m_Name, this->count());
 #endif

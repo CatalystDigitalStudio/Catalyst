@@ -1,6 +1,6 @@
 #pragma once
 
-#include "internal.h"
+#include "core/internal.h"
 
 #include <unordered_map>
 
@@ -102,24 +102,26 @@ namespace Catalyst
 
     };
 
+    /**
+     * Class that stores.
+     */
     class csv
     {
-
-    public:
-        enum class Direction
-        {
-            Row,
-            Colum
-        };
+        // Reads column major
+        //
+        // Key1, Key2, Key3
+        // Val1, Val2, Val3
+        // ... , ... , ...
+        //
 
     public:
         csv() = default;
         ~csv() = default;
 
-        csv& construct(std::string data, Direction direction = Direction::Colum);
+        csv& construct(std::string data);
 
         template<typename T>
-        inline T value(std::string key) { static_assert(false); }
+        inline std::vector<T> value(std::string key);
 
         template<>
         inline std::vector<std::string> value(std::string key)

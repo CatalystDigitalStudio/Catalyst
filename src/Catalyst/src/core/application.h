@@ -2,7 +2,7 @@
 
 #include "logging.h"
 #include "internal.h"
-#include "type_traits.h"
+#include "utilities.h"
 
 #include <mutex>
 #include <atomic>
@@ -22,7 +22,7 @@ namespace Catalyst
          * 
          * \return IApplication*
          */
-        CATALYST_LOGIC_DISCARD static std::shared_ptr<IApplication> Get();
+        CATALYST_LOGIC_DISCARD static std::shared_ptr<IApplication> get();
 
     public:
         ~IApplication();
@@ -32,11 +32,19 @@ namespace Catalyst
          * 
          * \return bool
          */
-        CATALYST_LOGIC_DISCARD const bool Close() const;
+        CATALYST_LOGIC_DISCARD const bool close() const;
+
+        /**
+         * Should the application close.
+         *
+         * \return bool
+         */
+        CATALYST_LOGIC_DISCARD const char* name() const;
+
         /**
          * Set the application to close.
          */
-        void Close(const bool);
+        void close(const bool);
 
         /**
          * Pure virtual, your main function.
@@ -72,7 +80,7 @@ namespace Catalyst
      */
     static void CatalystApplicationReload()
     {
-        IApplication::Get()->m_Close.store(true);
+        IApplication::get()->m_Close.store(true);
         IApplication::s_Reload.store(true);
     }
 
@@ -83,10 +91,10 @@ namespace Catalyst
      */
     static void CatalystApplicationClose()
     {
-        if (!IApplication::Get())
+        if (!IApplication::get())
             return;
 
-        IApplication::Get()->m_Close.store(true);
+        IApplication::get()->m_Close.store(true);
 
         IApplication::s_Instance.load()->~IApplication();
         IApplication::s_Instance.load().reset();
@@ -97,7 +105,7 @@ namespace Catalyst
      * 
      * @brief IMPORTANT: For internal engine use only
      */
-    template<typename T, typename R = CatalystEnableIf<CatalystBaseOf<IApplication, T>::value, T>::type>
+    template<typename T, typename R = std::enable_if_t<std::is_base_of_v<IApplication, T>, T>>
     CATALYST_LOGIC_DISCARD static CatalystResult CatalystApplicationLaunch()
     {
         CATALYST_PROFILE_CORE_FUNCTION(nullptr);
@@ -106,12 +114,12 @@ namespace Catalyst
 
         IApplication::s_Instance.store(std::make_shared<R>());
 
-        if(!IApplication::Get())
+        if(!IApplication::get())
             return CatalystResult::IApplication_Failed_Creation;
 
-        IApplication::Get()->Run();
+        IApplication::get()->Run();
 
-        if (IApplication::Get()->s_Reload)
+        if (IApplication::get()->s_Reload)
             return CatalystResult::IApplication_Recreation_Request;
         else
             return CatalystResult::Success;

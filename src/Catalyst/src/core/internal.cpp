@@ -1,7 +1,13 @@
-#include "phc.h"
+#include "pch.h"
 #include "internal.h"
 
 #include <future>
+
+#include "../platform/Platform.h"
+
+#include "events.h"
+
+#include "graphic/surface.h"
 
 namespace Catalyst
 {
@@ -19,6 +25,7 @@ namespace Catalyst
         }
     }
 
+    std::shared_ptr<Platform>                                            Engine::catalyst_s_Platform = Catalyst::initalizePlatform();
     std::atomic<CatalystError>                                           Engine::catalyst_s_EngineError;
     std::atomic<CatalystErrorHandler>                                    Engine::catalyst_s_EngineErrorHandler = std::atomic<CatalystErrorHandler>(catalyst_s_DefaultHandler);
     std::atomic_size_t                                                   Engine::catalyst_s_TickIndex = 0;
@@ -110,6 +117,7 @@ namespace Catalyst
     void Engine::updateEngine()
     {
         catalyst_s_TickIndex.store(catalyst_s_TickIndex + 1);
+        ListenerManager::update();
     }
 
     const char* const Engine::getVersion()
@@ -134,11 +142,20 @@ namespace Catalyst
     ///==========================================================================================
     
 
-    IRenderer* Engine::launchRenderer(unsigned int type)
+    std::shared_ptr<IRenderer> Engine::launchRenderer(unsigned int type)
     {
-        return nullptr;
+        return getPlatform()->initalizeRenderer("vulkanRenderer.dll");
     }
 
+    const std::shared_ptr<Platform> Engine::getPlatform()
+    {
+        return catalyst_s_Platform;
+    }
+
+    std::shared_ptr<ISurface> Engine::createSurface()
+    {
+        return internal::createSurface();
+    }
     ///==========================================================================================
     ///  Statistics and Profiling
     ///==========================================================================================

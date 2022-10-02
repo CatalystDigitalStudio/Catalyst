@@ -4,16 +4,43 @@
     <Filter Include="include">
       <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="platform">
+      <UniqueIdentifier>{4A63C33C-3630-1E48-5F49-0CF04B7553D6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform\windows">
+      <UniqueIdentifier>{A44FC440-9048-E392-B97A-C817A5D2C29E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src">
       <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\core">
       <UniqueIdentifier>{C55F2ECF-B12C-89DA-DA45-7782C671BE68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\files">
+      <UniqueIdentifier>{8F3E2DB5-FBA8-E12B-44E7-92D1B090BF80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphic">
+      <UniqueIdentifier>{7AA2AE16-E657-270C-6F4C-21E3DB001E10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\managment">
+      <UniqueIdentifier>{9490144D-0051-9083-C98B-D900350BD55F}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Catalyst.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\Platform.h">
+      <Filter>platform</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\windows\Windows.h">
+      <Filter>platform\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\windows\windowsSurface.h">
+      <Filter>platform\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\Profiling.h">
+      <Filter>src\core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\application.h">
       <Filter>src\core</Filter>
@@ -21,7 +48,13 @@
     <ClInclude Include="src\core\entry.h">
       <Filter>src\core</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\events.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
     <ClInclude Include="src\core\internal.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\internal.inl">
       <Filter>src\core</Filter>
     </ClInclude>
     <ClInclude Include="src\core\logging.h">
@@ -30,23 +63,60 @@
     <ClInclude Include="src\core\unicode.h">
       <Filter>src\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\type_traits.h">
+    <ClInclude Include="src\core\utilities.h">
       <Filter>src\core</Filter>
     </ClInclude>
-    <ClInclude Include="src\phc.h">
+    <ClInclude Include="src\core\version.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\files\file.h">
+      <Filter>src\files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\files\parsing.h">
+      <Filter>src\files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphic\font.h">
+      <Filter>src\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphic\image.h">
+      <Filter>src\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphic\renderer.h">
+      <Filter>src\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphic\surface.h">
+      <Filter>src\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\managment\assets.h">
+      <Filter>src\managment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\managment\factory.h">
+      <Filter>src\managment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\managment\manager.h">
+      <Filter>src\managment</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\profiling.h" />
-    <ClInclude Include="src\files\parsing.h" />
-    <ClInclude Include="src\files\file.h" />
-    <ClInclude Include="src\graphic\image.h" />
-    <ClInclude Include="src\graphic\font.h" />
-    <ClInclude Include="src\graphic\surface.h" />
-    <ClInclude Include="src\graphic\renderer.h" />
-    <ClInclude Include="src\core\version.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="platform\Platform.cpp">
+      <Filter>platform</Filter>
+    </ClCompile>
+    <ClCompile Include="platform\windows\Windows.cpp">
+      <Filter>platform\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="platform\windows\windowsSurface.cpp">
+      <Filter>platform\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\Profiling.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
     <ClCompile Include="src\core\application.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\events.cpp">
       <Filter>src\core</Filter>
     </ClCompile>
     <ClCompile Include="src\core\internal.cpp">
@@ -55,16 +125,23 @@
     <ClCompile Include="src\core\logging.cpp">
       <Filter>src\core</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\unicode.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\files\file.cpp">
+      <Filter>src\files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\files\parsing.cpp">
+      <Filter>src\files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphic\image.cpp">
+      <Filter>src\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphic\renderer.cpp">
+      <Filter>src\graphic</Filter>
+    </ClCompile>
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\profiling.cpp" />
-    <ClCompile Include="src\core\unicode.cpp" />
-    <ClCompile Include="src\files\parsing.cpp" />
-    <ClCompile Include="src\files\file.cpp" />
-    <ClCompile Include="src\graphic\image.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\core\internal.inl" />
   </ItemGroup>
 </Project>

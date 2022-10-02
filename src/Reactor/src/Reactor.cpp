@@ -9,18 +9,13 @@
 #include <fstream>
 #include <streambuf>
 
+using namespace std::chrono_literals;
+
 CATALYST_LAUNCH(Reactor);
 
 void ReactorErrorHandler(Catalyst::CatalystError&& error)
 {
     CATALYST_LOG_ERROR(error.message);
-}
-
-void disision()
-{
-    CATALYST_LOG_INFO("Press any key to exit...");
-    auto result = getc(stdin);
-    Catalyst::IApplication::Get()->Close(true);
 }
 
 Reactor::Reactor()
@@ -35,16 +30,29 @@ void Reactor::Run()
 {
     CATALYST_PROFILE_FUNCTION(nullptr);
 
-    const char* const version = Catalyst::Engine::getVersion();
+    auto surface = Catalyst::Engine::createSurface();
+    surface->create();
 
-    auto f = std::async(disision);
+    auto renderer = Catalyst::Engine::launchRenderer(0);
+    renderer->initalize(surface);
 
-    while (!Close())
+    while (!close())
     {
+        surface->update();
         Catalyst::Engine::updateEngine();
+
+        std::this_thread::sleep_for(10ms);
     }
 
-    f.wait();
+    renderer->cleanup();
+    surface->destroy();
 
     CATALYST_LOG_INFO("Allocation : {0}", Catalyst::Engine::getAllocationAmount());
+}
+
+bool Reactor::onEvent(TestEvent&& event)
+{
+    event.i;
+    Catalyst::IApplication::get()->close(true);
+    return true;
 }

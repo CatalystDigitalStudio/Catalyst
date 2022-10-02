@@ -18,8 +18,4 @@
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="log\example.json" />
-    <None Include="assets\translation.json" />
-  </ItemGroup>
 </Project>

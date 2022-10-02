@@ -8,11 +8,14 @@ workspace "Catalyst"
 
 	flags { "MultiProcessorCompile" }
 
-bin    = "../build/bin/%{cfg.buildcfg}-%{cfg.architecture}/%{prj.name}"
-binint = "../build/bin/int/%{cfg.buildcfg}-%{cfg.architecture}/%{prj.name}"
+bin    = "%{wks.location}/build/bin/%{cfg.buildcfg}-%{cfg.architecture}"
+binint = "%{wks.location}/build/bin/int/%{cfg.buildcfg}-%{cfg.architecture}/%{prj.name}"
 
 group "Dependencies"
-    --None yet
+    include "external/zlib"
+group "Renderers"
+    include "src/renderer/Vulkan"
+    include "src/renderer/DX11"
 group ""
 
 include "src/Catalyst"

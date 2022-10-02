@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include <fstream>
 
-#include "core/internal.h"
+#include <filesystem>
 
 namespace Catalyst
 {
@@ -20,13 +20,22 @@ namespace Catalyst
         binary = std::ios::binary,
     };
 
-    class File
+    struct Path
+    {
+        std::string m_FullPath;
+        std::string m_Path;
+        std::string m_Name;
+        std::string m_Extention;
+
+        static Path construct(std::string path);
+    };
+
+    struct File
     {
 
-    protected:
-        explicit File(const std::string&, Openmode);
-
     public:
+        File() = default;
+        File(const std::string&, Openmode);
         ~File();
 
         const std::string read();
@@ -34,31 +43,20 @@ namespace Catalyst
 
         std::fstream& get();
 
-        CATALYST_LOGIC_DISCARD constexpr const std::string& getFullPath()  const;
-        CATALYST_LOGIC_DISCARD constexpr const std::string& getPath()      const;
-        CATALYST_LOGIC_DISCARD constexpr const std::string& getName()      const;
-        CATALYST_LOGIC_DISCARD constexpr const std::string& getExtention() const;
+        CATALYST_LOGIC_DISCARD const std::string getFullPath()  const;
+        CATALYST_LOGIC_DISCARD const std::string getPath()      const;
+        CATALYST_LOGIC_DISCARD const std::string getName()      const;
+        CATALYST_LOGIC_DISCARD const std::string getExtention() const;
 
     private:
         std::fstream m_Stream;
 
     private:
-        std::string m_FullPath;
-        std::string m_Path;
-        std::string m_Name;
-        std::string m_Extention;
-    };
-
-    class FileManager
-    {
-
-    public:
-        static File& open(const std::string& path, Openmode);
-
-        static bool isOpen(const std::string& path);
+        std::filesystem::path m_Path;
 
     private:
-        static std::unordered_map<std::string, File> m_Files;
+        template<typename T>
+        friend class IFactory;
 
     };
 

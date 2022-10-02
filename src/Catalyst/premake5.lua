@@ -11,7 +11,7 @@ project "Catalyst"
     targetdir (bin)
     objdir (binint)
     
-    pchheader "phc.h"
+    pchheader "pch.h"
     pchsource "src/pch.cpp"
     
     files {
@@ -20,20 +20,30 @@ project "Catalyst"
          "src/**.c",      -- Core files
          "src/**.cpp",    -- Core files
          "src/**.hpp",    -- Core files
-         "src/**.inl"     -- Core files
+         "src/**.inl",    -- Core files
+
+         "platform/Platform.h",      -- Core files
+         "platform/Platform.cpp",      -- Core files
+         "platform/%{cfg.platform}/**.h",      -- Core files
+         "platform/%{cfg.platform}/**.c",      -- Core files
+         "platform/%{cfg.platform}/**.cpp",    -- Core files
+         "platform/%{cfg.platform}/**.hpp",    -- Core files
+         "platform/%{cfg.platform}/**.inl"     -- Core files
     }
     
     defines {
-        "STBTT_STATIC"
+        "STBTT_STATIC",
+        "CATALYST_CORE"
     }
 
     includedirs{
         "%{IncludeDir.Catalyst}/src",
-        "%{IncludeDir.spdlog}"
+        "%{IncludeDir.spdlog}",
+        "%{IncludeDir.external}"
     }
     
     links {
-                        -- None
+        "zlib"
     }
     
     filter "system:windows"

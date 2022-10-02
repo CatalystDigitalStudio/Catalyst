@@ -1,4 +1,4 @@
-#include "phc.h"
+#include "pch.h"
 #include "application.h"
 
 namespace Catalyst
@@ -13,7 +13,7 @@ namespace Catalyst
 
         CATALYST_CORE_INFO("*************************\tCATALYST APPLICATION STARTING\t*************************");
     }
-    CATALYST_LOGIC_DISCARD std::shared_ptr<IApplication> IApplication::Get()
+    CATALYST_LOGIC_DISCARD std::shared_ptr<IApplication> IApplication::get()
     {
         return s_Instance;
     }
@@ -21,11 +21,15 @@ namespace Catalyst
     {
         //CATALYST_INFO("*************************\tCATALYST APPLICATION STOPING\t*************************\n");
     }
-    const bool IApplication::Close() const
+    const bool IApplication::close() const
     {
         return m_Close.load();
     }
-    void IApplication::Close(const bool close)
+    const char* IApplication::name() const
+    {
+        return m_Name;
+    }
+    void IApplication::close(const bool close)
     {
         m_Close.store(close);
     }

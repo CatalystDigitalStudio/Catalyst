@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Catalyst">
+      <UniqueIdentifier>{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Catalyst\include">
+      <UniqueIdentifier>{3D540EFD-294D-2D4F-527F-12D43ED70C5B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Catalyst\platform">
+      <UniqueIdentifier>{7E9E8F76-EAB4-8D0C-332C-192E9F815E94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Catalyst\platform\windows">
+      <UniqueIdentifier>{D87EE2DD-4441-1668-8DF1-A4F4F9F2EE45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Catalyst\src">
+      <UniqueIdentifier>{E11502CB-CD78-916F-76FE-C92562405DF2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Catalyst\src\core">
+      <UniqueIdentifier>{F99AFA08-65B1-F89E-AE28-84C01A7EC926}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Catalyst\src\files">
+      <UniqueIdentifier>{43E08028-2FC4-417E-9824-3CD184272C00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Catalyst\src\graphic">
+      <UniqueIdentifier>{2E8171AD-1A10-FB76-C32E-0F72AF9C0B1D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Catalyst\src\managment">
+      <UniqueIdentifier>{48EC09A0-34E6-32F2-1D53-C90209EC985E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="platform">
+      <UniqueIdentifier>{4A63C33C-3630-1E48-5F49-0CF04B7553D6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Catalyst\include\Catalyst.h">
+      <Filter>Catalyst\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\platform\Platform.h">
+      <Filter>Catalyst\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\platform\windows\Windows.h">
+      <Filter>Catalyst\platform\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\platform\windows\windowsSurface.h">
+      <Filter>Catalyst\platform\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\core\Profiling.h">
+      <Filter>Catalyst\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\core\application.h">
+      <Filter>Catalyst\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\core\entry.h">
+      <Filter>Catalyst\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\core\events.h">
+      <Filter>Catalyst\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\core\internal.h">
+      <Filter>Catalyst\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\core\internal.inl">
+      <Filter>Catalyst\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\core\logging.h">
+      <Filter>Catalyst\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\core\unicode.h">
+      <Filter>Catalyst\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\core\utilities.h">
+      <Filter>Catalyst\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\core\version.h">
+      <Filter>Catalyst\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\files\file.h">
+      <Filter>Catalyst\src\files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\files\parsing.h">
+      <Filter>Catalyst\src\files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\graphic\font.h">
+      <Filter>Catalyst\src\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\graphic\image.h">
+      <Filter>Catalyst\src\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\graphic\renderer.h">
+      <Filter>Catalyst\src\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\graphic\surface.h">
+      <Filter>Catalyst\src\graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\managment\assets.h">
+      <Filter>Catalyst\src\managment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\managment\factory.h">
+      <Filter>Catalyst\src\managment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\managment\manager.h">
+      <Filter>Catalyst\src\managment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Catalyst\src\pch.h">
+      <Filter>Catalyst\src</Filter>
+    </ClInclude>
+    <ClInclude Include="platform\Platform.h">
+      <Filter>platform</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Catalyst\platform\Platform.cpp">
+      <Filter>Catalyst\platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\platform\windows\Windows.cpp">
+      <Filter>Catalyst\platform\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\platform\windows\windowsSurface.cpp">
+      <Filter>Catalyst\platform\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\src\core\Profiling.cpp">
+      <Filter>Catalyst\src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\src\core\application.cpp">
+      <Filter>Catalyst\src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\src\core\events.cpp">
+      <Filter>Catalyst\src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\src\core\internal.cpp">
+      <Filter>Catalyst\src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\src\core\logging.cpp">
+      <Filter>Catalyst\src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\src\core\unicode.cpp">
+      <Filter>Catalyst\src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\src\files\file.cpp">
+      <Filter>Catalyst\src\files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\src\files\parsing.cpp">
+      <Filter>Catalyst\src\files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\src\graphic\image.cpp">
+      <Filter>Catalyst\src\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\src\graphic\renderer.cpp">
+      <Filter>Catalyst\src\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Catalyst\src\pch.cpp">
+      <Filter>Catalyst\src</Filter>
+    </ClCompile>
+    <ClCompile Include="platform\Platform.cpp">
+      <Filter>platform</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

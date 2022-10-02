@@ -7,7 +7,9 @@ namespace Catalyst
     {
 
     public:
-        explicit Image(unsigned char* data, size_t length, unsigned int channels);
+        Image() = default; 
+        Image(unsigned char* data, size_t length, unsigned int channels);
+        Image(const std::string& path, unsigned int channels);
         ~Image();
 
         const unsigned char* getData() const;
@@ -23,6 +25,9 @@ namespace Catalyst
         int m_Y;
         int m_Channels;
 
+    private:
+        template<typename T>
+        friend class IFactory;
     };
 
 }

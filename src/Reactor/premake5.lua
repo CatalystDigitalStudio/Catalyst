@@ -21,6 +21,7 @@ project "Reactor"
     includedirs{
         "include",
         "%{IncludeDir.Catalyst}/include",
+        "%{IncludeDir.Catalyst}/src",
         "%{IncludeDir.spdlog}"
     }
     

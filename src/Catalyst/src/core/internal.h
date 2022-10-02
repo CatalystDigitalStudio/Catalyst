@@ -73,12 +73,24 @@
 #define CATALYST_PROFILE_CORE_FUNCTION(RESULT)
 #endif
 
+#ifdef CATALYST_DLL
+#ifdef _WIN32
+#ifdef CATALYST_EXPORT
+#define CATALYST_API _declspec(dllexport)
+#else
+#define CATALYST_API _declspec(dllimport)
+#endif
+#endif
+#else
+#define CATALYST_API
+#endif
 ///----------------------------------------------
 /// CATALYST INTERNALS
 ///----------------------------------------------
 
 #include <mutex>
-#include "type_traits.h"
+#include "utilities.h"
+#include "managment/assets.h"
 
 #ifndef CATALYST_HEADER_INTERNAL
 #define CATALYST_HEADER_INTERNAL
@@ -93,7 +105,7 @@ namespace Catalyst
     using catalyst_char = char;
 #endif
 
-    enum class CatalystResult
+    enum class CATALYST_API CatalystResult
     {
         Unknown = -2,
         Error = -1,
@@ -102,6 +114,7 @@ namespace Catalyst
         Pointer_Is_Nullptr                 = 0b00000000'00000000'00000001'00000001,
         End_Is_Less_Than_Begin             = 0b00000000'00000000'00000001'00000010,
         Destination_Is_Smaller_Than_Source = 0b00000000'00000000'00000001'00000011,
+        Executing_Unreachable_Code         = 0b00000000'00000000'00000001'00000101,
 
         Commandline_Argument_Unknown    = 0b00000000'00000000'00000010'00000000,
         Commandline_Argument_Malformed  = 0b00000000'00000000'00000010'00000100,
@@ -144,6 +157,13 @@ namespace Catalyst
     typedef void (*CatalystErrorHandler)(CatalystError&&);
 
     class IRenderer;
+    class ISurface;
+    class Platform;
+
+    namespace internal
+    {
+        extern std::shared_ptr<ISurface> createSurface();
+    }
 
     class Engine
     {
@@ -197,22 +217,90 @@ namespace Catalyst
         static const unsigned char getPatchVersion();
 
         ///==========================================================================================
-        ///  Object creation
+        ///  Object creation and management
         ///==========================================================================================
-        static IRenderer* launchRenderer(unsigned int type);
+        
+        /**
+         * .
+         * 
+         * \param type
+         * \return 
+         */
+        static std::shared_ptr<IRenderer> launchRenderer(unsigned int type);
+
+        /**
+         * .
+         * 
+         * \param key
+         * \param ...args
+         * \return 
+         */
+        template<typename Value, typename Key, typename... Args>
+        inline static auto requestAsset(Key key, Args&&... args)
+        {
+            return AssetManager<Value>::request(key, args...);
+        }
+
+        /**
+         * .
+         * 
+         * \return 
+         */
+        static const std::shared_ptr<Platform> getPlatform();
+
+        /**
+         * .
+         * 
+         * \return 
+         */
+        static std::shared_ptr<ISurface> createSurface();
 
         ///==========================================================================================
         ///  Statistics and Profiling
         ///==========================================================================================
+        /**
+         * @function getTickCount().
+         * 
+         * @brief Returns the number of ticks since the start of the program
+         * 
+         * \return size_t - Ticks
+         */
         static size_t getTickCount();
 
+        /**
+         * .
+         * 
+         * \return 
+         */
         static size_t getAllocations();
 
+        /**
+         * .
+         * 
+         * \return 
+         */
         static size_t getAllocationAmount();
 
+#ifdef CATALYST_CORE
     private:
+        /**
+         * @function addAllocation()
+         * 
+         * @brief Increments the allocation counter
+         * 
+         * \param amount - size_t of allocation in bytes
+         */
         static void addAllocation(size_t amount) noexcept;
+
+        /**
+         * @function removeAllocation()
+         *
+         * @brief Decrements the allocation counter
+         *
+         * \param amount - size_t of allocation in bytes
+         */
         static void removeAllocation(size_t amount) noexcept;
+#endif
 
     public:
         ///==========================================================================================
@@ -239,6 +327,7 @@ namespace Catalyst
         CATALYST_LOGIC_DISCARD static CatalystError getLastError();
 
     private:
+        static std::shared_ptr<Platform> catalyst_s_Platform;
         static std::atomic<CatalystError> catalyst_s_EngineError;
         static std::atomic<CatalystErrorHandler> catalyst_s_EngineErrorHandler;
         static std::atomic_size_t catalyst_s_TickIndex;

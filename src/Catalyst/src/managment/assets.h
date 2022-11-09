@@ -8,4 +8,5 @@ namespace Catalyst
     template<typename T>
     using AssetManager = IManagerShared<std::string, T>;
 
+
 }

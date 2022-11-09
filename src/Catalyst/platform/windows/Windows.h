@@ -21,7 +21,8 @@ namespace Catalyst
     public:
         virtual PlatformData getPlatformData() override;
 
-        virtual std::shared_ptr<IRenderer> initalizeRenderer(std::string) override;
+        virtual IRenderer* createRenderer(std::string, CatalystPtrSurface, RendererInfo) override;
+        virtual CatalystPtrSurface createSurface(SurfaceData) override;
 
     private:
         PlatformData data = {};

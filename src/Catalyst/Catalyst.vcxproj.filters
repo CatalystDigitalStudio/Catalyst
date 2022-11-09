@@ -99,6 +99,8 @@
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\engine.h" />
+    <ClInclude Include="src\core\scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="platform\Platform.cpp">
@@ -143,5 +145,7 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\engine.cpp" />
+    <ClCompile Include="src\core\scene.cpp" />
   </ItemGroup>
 </Project>

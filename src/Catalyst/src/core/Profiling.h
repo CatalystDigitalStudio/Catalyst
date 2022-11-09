@@ -34,7 +34,7 @@ namespace Catalyst
         void start();
         void stop();
 
-        auto count();
+        long long count();
 
         void log();
 

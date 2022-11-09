@@ -1,12 +1,32 @@
 #pragma once
 
 #include "core/internal.h"
+#include "core/engine.h"
 #include "image.h"
 
 namespace Catalyst
 {
 
-    typedef struct SurfaceData SurfaceData;
+    enum CatalystSurfaceFlags
+    {
+        CATALYST_SURFACE_DEFAULT_POSITION  = 0,
+        CATALYST_SURFACE_DEFAULT_DIMENSION = 0
+    };
+
+    struct SurfaceData
+    {
+        std::string m_Title = "Catalyst";
+        struct
+        {
+            unsigned int m_X;
+            unsigned int m_Y;
+        } m_Position = { CATALYST_SURFACE_DEFAULT_POSITION };
+        struct
+        {
+            unsigned int m_Width;
+            unsigned int m_Height;
+        } m_Dimension = { CATALYST_SURFACE_DEFAULT_DIMENSION };
+    };
 
     class CATALYST_API ISurface
     {
@@ -15,7 +35,7 @@ namespace Catalyst
         ISurface() = default;
         virtual ~ISurface() = default;
 
-        virtual void create() = 0;
+        virtual void create(SurfaceData) = 0;
         virtual void update() = 0;
         virtual void destroy() = 0;
 
@@ -25,13 +45,8 @@ namespace Catalyst
         virtual ISurface* setDimension(unsigned int width, unsigned int height) = 0;
 
     protected:
-        SurfaceData* m_Data;
-        std::string m_Title;
-        unsigned int m_X;
-        unsigned int m_Y;
-        unsigned int m_Width;
-        unsigned int m_Height;
-
+        SurfaceData m_Data = {};
     };
 
+    using CatalystPtrSurface = ISurface*;
 }

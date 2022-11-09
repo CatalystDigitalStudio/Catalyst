@@ -34,7 +34,7 @@ namespace Catalyst
     {
         m_Stop = clock::now();
     }
-    auto Profiler::count()
+    long long Profiler::count()
     {
         return (m_Stop - m_Start).count();
     }

@@ -5,6 +5,7 @@ namespace Catalyst
 {
     std::atomic<std::shared_ptr<IApplication>> IApplication::s_Instance;
     std::atomic_bool IApplication::s_Reload;
+    std::unique_ptr<Scene> m_Scene;
 
     IApplication::IApplication(const char* process_name)
         : m_Name(process_name), m_Close(false)
@@ -28,6 +29,18 @@ namespace Catalyst
     const char* IApplication::name() const
     {
         return m_Name;
+    }
+    CATALYST_LOGIC_DISCARD Scene* IApplication::getScene()
+    {
+        return m_Scene.get();
+    }
+    void IApplication::closeScene()
+    {
+        if (m_Scene)
+        {
+            m_Scene->onDestroy();
+            m_Scene.reset();
+        }
     }
     void IApplication::close(const bool close)
     {

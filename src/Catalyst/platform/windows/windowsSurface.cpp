@@ -26,10 +26,10 @@ namespace Catalyst
 
     WindowsSurface::WindowsSurface()
     {
-        m_Data = new SurfaceData();
+
     }
 
-    void WindowsSurface::create()
+    void WindowsSurface::create(SurfaceData data)
     {
         WNDCLASSEXA w_Class = {};
 
@@ -52,30 +52,31 @@ namespace Catalyst
             return;
         }
 
-        m_Data->m_Window = CreateWindowExA(0, CLASS_NAME, m_Title.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, Engine::getPlatform()->getPlatformData().instance, nullptr);
+        m_Data.m_Window = CreateWindowExA(0, CLASS_NAME, data.m_Title.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, Engine::getPlatform()->getPlatformData().instance, nullptr);
 
-        if (!m_Data->m_Window)
+        if (!m_Data.m_Window)
         {
             Engine::raiseError({ Level::Error, "[CATALYST][WIN32 ERROR]", (CatalystResult)GetLastError(), __FUNCTION__ });
             return;
         }
 
-        ShowWindow(m_Data->m_Window, SHOW_OPENWINDOW);
-        UpdateWindow(m_Data->m_Window);
+        ShowWindow(m_Data.m_Window, SW_SHOW);
+        SetForegroundWindow(m_Data.m_Window);
+        SetFocus(m_Data.m_Window);
     }
     void WindowsSurface::update()
     {
-        while (PeekMessageA(&m_Data->m_Message, NULL, NULL, NULL, PM_REMOVE))
+        while (PeekMessageA(&m_Data.m_Message, NULL, NULL, NULL, PM_REMOVE))
         {
-            TranslateMessage(&m_Data->m_Message);
-            DispatchMessageA(&m_Data->m_Message);
+            TranslateMessage(&m_Data.m_Message);
+            DispatchMessageA(&m_Data.m_Message);
         }
     }
     void WindowsSurface::destroy()
     {
-        if (m_Data->m_Window)
+        if (m_Data.m_Window)
         {
-            DestroyWindow(m_Data->m_Window);
+            DestroyWindow(m_Data.m_Window);
         }
 
         UnregisterClassA(CLASS_NAME, Engine::getPlatform()->getPlatformData().instance);
@@ -85,7 +86,7 @@ namespace Catalyst
     ISurface* WindowsSurface::setTitle(const std::string& title)
     {
 
-        SetWindowTextA(m_Data->m_Window, title.c_str());
+        SetWindowTextA(m_Data.m_Window, title.c_str());
 
         return this;
     }
@@ -95,13 +96,13 @@ namespace Catalyst
     }
     ISurface* WindowsSurface::setPosition(unsigned int x, unsigned int y)
     {
-        SetWindowPos(m_Data->m_Window, NULL, (m_X = x), (m_Y = y), m_Width, m_Height, 0);
+        SetWindowPos(m_Data.m_Window, NULL, (m_WindowData.m_Position.m_X = x), (m_WindowData.m_Position.m_Y = y), m_WindowData.m_Dimension.m_Width, m_WindowData.m_Dimension.m_Height, 0);
 
         return this;
     }
     ISurface* WindowsSurface::setDimension(unsigned int width, unsigned int height)
     {
-        SetWindowPos(m_Data->m_Window, NULL, m_X, m_Y, (m_Width = width), (m_Height = height), 0);
+        SetWindowPos(m_Data.m_Window, NULL, m_WindowData.m_Position.m_X, m_WindowData.m_Position.m_Y, (m_WindowData.m_Dimension.m_Width = width), (m_WindowData.m_Dimension.m_Height = height), 0);
 
         return this;
     }

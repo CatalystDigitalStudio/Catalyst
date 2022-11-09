@@ -3,6 +3,8 @@
 #include "../src/core/entry.h"
 #include "../src/core/application.h"
 
+#include "../src/core/engine.h"
+
 #include "../src/core/unicode.h"
 
 #include "../src/files/file.h"

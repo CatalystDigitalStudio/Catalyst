@@ -43,6 +43,10 @@ namespace Catalyst
       
         using factory = IFactoryShared<Value>;
 
+        //static_assert(std::is_trivially_default_constructible_v<Value>);
+        //static_assert(std::is_trivially_copy_constructible_v   <Value>);
+        //static_assert(std::is_trivially_move_constructible_v   <Value>);
+
     public:
         template<typename... Args>
         static constexpr auto construct(Key key, Args&&... args)

@@ -3,7 +3,9 @@
 #include <string>
 #include <memory>
 
-#include "../src/core/internal.h"
+#include "core/engine.h"
+#include "graphic/renderer.h"
+#include "graphic/surface.h"
 
 
 namespace Catalyst
@@ -11,13 +13,14 @@ namespace Catalyst
 
     struct PlatformData;
 
-    class Platform
+    class CATALYST_API Platform
     {
 
     public:
         virtual PlatformData getPlatformData() = 0;
 
-        virtual std::shared_ptr<IRenderer> initalizeRenderer(std::string) = 0;
+        virtual CatalystPtrRenderer createRenderer(std::string, CatalystPtrSurface, RendererInfo) = 0;
+        virtual CatalystPtrSurface createSurface(SurfaceData) = 0;
 
     };
 

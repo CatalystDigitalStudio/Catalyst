@@ -1,49 +1,80 @@
 #pragma once
 
+#include "core/engine.h"
 #include "graphic/renderer.h"
 
 #include "vulkan/vulkan.h"
+#include "vulkan/vulkan_core.h"
 
+#if defined (_WIN32)
+#include "vulkan/vulkan_win32.h"
+#elif defined(__linux__)
+#include "vulkan/vulkan_xcb.h"
+#elif defined(__ANDROID__)
+#include "vulkan/vulkan_android.h"
+#endif
 
-class CATALYST_API VulkanDevice : public Catalyst::IDevice
+class CATALYST_API VulkanPipeline : public Catalyst::IPipeline
 {
 
 public:
-    VulkanDevice(VkPhysicalDevice device, VkPhysicalDeviceProperties properties);
-    ~VulkanDevice();
+    VulkanPipeline(VkDevice device, VkSurfaceKHR surface);
+    ~VulkanPipeline();
 
-    VkPhysicalDevice& getPhysicalDevice();
-
-private:
-    virtual const unsigned int getID() override;
-    virtual const bool getProperty(Property) override;
-    virtual void setProperty(Property, bool value) override;
+    VkShaderModule createModule(std::string code);
+    void configurePipeline(Catalyst::CatalystShaderTopology topology, const uint32_t width, const uint32_t height);
 
 private:
-    VkPhysicalDevice m_Device;
-    VkPhysicalDeviceProperties m_Properties;
+    virtual void initalize(Catalyst::PipelineInformation info) override;
+    virtual void cleanup() override;
+
+    virtual void addStage(Catalyst::CatalystShaderStageType stagetype, std::string byteCode) override;
+
+    virtual std::string compileShader(std::string rawCode) override;
+
+private:
+    VkDevice m_Device;
+    VkSurfaceKHR m_Surface;
+
+    VkViewport m_Viewport     = {};
+    VkRect2D m_Scissor        = {};
+    VkPipelineLayout m_Layout = {};
+    VkRenderPass m_RenderPass = {};
+
+    //std::vector<> m_Modules;
+
 };
-
 
 class CATALYST_API VulkanRenderer : public Catalyst::IRenderer
 {
 
 public:
-    VulkanRenderer() = default;
-    ~VulkanRenderer() = default;
+    VulkanRenderer(Catalyst::CatalystPtrSurface surface, Catalyst::RendererInfo info);
+    ~VulkanRenderer();
 
-
-private:
-    virtual void initalize(std::shared_ptr<Catalyst::ISurface>) override;
+    virtual void initalize() override;
     virtual void cleanup() override;
 
-    virtual void addPipline() override;
-
-    
-private: //Internal class maintenence methods
-    virtual void initalizeSwapchain() override;
-    virtual void initalizeDevices() override;
+    virtual void createPipeline() override;
+    virtual std::shared_ptr<Catalyst::IPipeline> getPipeline() override;
 
 private:
-    VkInstance m_Instance = {};
+    void createInstance();
+    void createDevice();
+    void createSwapchain(Catalyst::CatalystPtrSurface);
+
+    uint32_t scoreDeviceSuitability(VkPhysicalDevice&);
+
+private:
+    Catalyst::RendererInfo m_Info;
+    VkInstance m_Instance;
+
+    VkPhysicalDevice m_PhysicalDevice;
+    VkDevice m_LogicalDevice;
+
+    VkSurfaceKHR m_Surface;
+    VkFormat m_ColorFormat;
+    VkColorSpaceKHR m_ColorSpace;
+
+    std::shared_ptr<VulkanPipeline> m_Pipeline;
 };

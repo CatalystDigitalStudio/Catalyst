@@ -55,6 +55,8 @@ public:
     virtual void initalize() override;
     virtual void cleanup() override;
 
+    virtual void render() override;
+
     virtual void createPipeline() override;
     virtual std::shared_ptr<Catalyst::IPipeline> getPipeline() override;
 

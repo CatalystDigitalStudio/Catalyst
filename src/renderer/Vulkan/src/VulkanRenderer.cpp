@@ -84,6 +84,10 @@ void VulkanRenderer::cleanup()
     vkDestroyInstance(m_Instance, nullptr);
 }
 
+void VulkanRenderer::render()
+{
+}
+
 void VulkanRenderer::createPipeline()
 {
     m_Pipeline = std::make_shared<VulkanPipeline>(m_LogicalDevice, m_Surface);

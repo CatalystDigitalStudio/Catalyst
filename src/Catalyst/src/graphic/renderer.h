@@ -3,6 +3,7 @@
 #include "core/internal.h"
 #include "core/engine.h"
 #include "surface.h"
+#include "commands.h"
 
 namespace Catalyst
 {
@@ -19,15 +20,24 @@ namespace Catalyst
 
     enum CatalystRendererFlags
     {
+        /* NULL FLAG */
         CATALYST_RENDERER_FLAG_NONE          = 0x0000,
+        /* USES NO PRESENTATION SURFACE */
         CATALYST_RENDERER_FLAG_HEADLESS      = 0x0002,
 
+        /* LOOKS FOR MOST SUITABLE DEVICE TO RENDER */
         CATALYST_RENDERER_FLAG_DEVICE_DEFAULT     = 0x0010,
+        /* IS LOW POWER CONSUMSION DEVICE */
         CATALYST_RENDERER_FLAG_DEVICE_LOW_POWER   = 0x0011,
+        /* IS INTEGERATED GRAPHICS DEVICE */
         CATALYST_RENDERER_FLAG_DEVICE_INTEGERATED = 0x0012,
                           
+        /* USE A SINGLE PRESENTATION BUFFER*/
         CATALYST_RENDERER_FLAG_SINGLE_BUFFER = 0x0021,
-        CATALYST_RENDERER_FLAG_DOUBLE_BUFFER = 0x0022
+        /* USE A FRONT AND BACK PRESENTATION BUFFER*/
+        CATALYST_RENDERER_FLAG_DOUBLE_BUFFER = 0x0022,
+        /* USE A FRONT AND 2 BACK PRESENTATION BUFFER*/
+        CATALYST_RENDERER_FLAG_TRIPLE_BUFFER = 0x0023
     };
 
     enum CatalystShaderStageType
@@ -147,8 +157,12 @@ namespace Catalyst
         virtual void initalize() = 0;
         virtual void cleanup() = 0;
 
+        virtual void render() = 0;
+
         virtual void createPipeline() = 0;
         virtual std::shared_ptr<IPipeline> getPipeline() = 0;
+
+        virtual constexpr CommandPool& getCommandPool() = 0;
     
     protected:
         IRenderer();

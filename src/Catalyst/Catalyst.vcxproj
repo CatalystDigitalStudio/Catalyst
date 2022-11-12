@@ -158,6 +158,7 @@
     <ClInclude Include="src\files\parsing.h" />
     <ClInclude Include="src\graphic\font.h" />
     <ClInclude Include="src\graphic\image.h" />
+    <ClInclude Include="src\graphic\commands.h" />
     <ClInclude Include="src\graphic\renderer.h" />
     <ClInclude Include="src\graphic\surface.h" />
     <ClInclude Include="src\managment\assets.h" />
@@ -179,6 +180,7 @@
     <ClCompile Include="src\core\unicode.cpp" />
     <ClCompile Include="src\files\file.cpp" />
     <ClCompile Include="src\files\parsing.cpp" />
+    <ClCompile Include="src\graphic\commands.cpp" />
     <ClCompile Include="src\graphic\image.cpp" />
     <ClCompile Include="src\graphic\renderer.cpp" />
     <ClCompile Include="src\pch.cpp">

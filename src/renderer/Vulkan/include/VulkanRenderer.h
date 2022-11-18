@@ -14,15 +14,40 @@
 #include "vulkan/vulkan_android.h"
 #endif
 
+#include <deque>
+
+struct VulkanImage
+{
+
+    VkImage image;
+    VkDeviceMemory memory;
+    VkImageView view;
+    VkFormat format;
+
+    void create(VkDevice device, uint32_t width, uint32_t height, uint32_t mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties);
+
+    void destroy(VkDevice device);
+
+};
+
 class CATALYST_API VulkanPipeline : public Catalyst::IPipeline
 {
 
 public:
-    VulkanPipeline(VkDevice device, VkSurfaceKHR surface);
+    VulkanPipeline(VkDevice device, VkPhysicalDevice pDevice, VkSurfaceKHR surface);
     ~VulkanPipeline();
 
     VkShaderModule createModule(std::string code);
     void configurePipeline(Catalyst::CatalystShaderTopology topology, const uint32_t width, const uint32_t height);
+
+private:
+    void setupDynamicState(bool viewport, bool scissor, bool line_width, bool blend);
+    void setupInput(Catalyst::CatalystShaderTopology topology);
+    void setupView(const uint32_t width, const uint32_t height);
+    void setupRasterizer();
+    void setupMultisample();
+    void setupDepth();
+    void setupBlending();
 
 private:
     virtual void initalize(Catalyst::PipelineInformation info) override;
@@ -34,6 +59,7 @@ private:
 
 private:
     VkDevice m_Device;
+    VkPhysicalDevice m_PhysicalDevice;
     VkSurfaceKHR m_Surface;
 
     VkViewport m_Viewport     = {};
@@ -58,6 +84,8 @@ public:
     virtual void createPipeline() override;
     virtual std::shared_ptr<Catalyst::IPipeline> getPipeline() override;
 
+    VkCommandBuffer getCommandBuffer(bool begin);
+
 private:
     void createInstance();
     void createDevice();
@@ -76,5 +104,6 @@ private:
     VkFormat m_ColorFormat;
     VkColorSpaceKHR m_ColorSpace;
 
-    std::shared_ptr<VulkanPipeline> m_Pipeline;
+    std::unordered_map<uint32_t, std::shared_ptr<VulkanPipeline>> m_Pipelines;
+    std::deque<void*> m_CatalystCommandBuffer;
 };

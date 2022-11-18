@@ -49,6 +49,16 @@ struct TestScene : public Catalyst::Scene
     {
         auto renderer = getApplication<Reactor>()->getRenderer();
 
+
+        Catalyst::PipelineInformation info = {};
+
+        info.cullDirection = Catalyst::CATALYST_SHADER_CULL_DIRECTION_CLOCKWISE;
+        info.cullFace = Catalyst::CATALYST_SHADER_CULL_FACE_BACK;
+        info.topology = Catalyst::CATALYST_SHADER_TOPOLOGY_TRIANGLE_STRIP;
+
+        renderer->initalize();
+        renderer->createPipeline();
+        renderer->getPipeline()->initalize(info);
     }
     virtual void onUpdate() override
     {
@@ -59,6 +69,12 @@ struct TestScene : public Catalyst::Scene
         {
 
         }
+
+        auto renderer = getApplication<Reactor>()->getRenderer();
+
+        //renderer->submit(model, material, ...);
+        //renderer->render();
+
 
     }
     virtual void onDestroy() override
@@ -77,15 +93,6 @@ void Reactor::startRenderer(Catalyst::CatalystPtrSurface surface)
 
     m_Renderer.reset(Catalyst::Engine::createRenderer(surface, rInfo));
 
-    Catalyst::PipelineInformation info = {};
-
-    info.cullDirection = Catalyst::CATALYST_SHADER_CULL_DIRECTION_CLOCKWISE;
-    info.cullFace = Catalyst::CATALYST_SHADER_CULL_FACE_BACK;
-    info.topology = Catalyst::CATALYST_SHADER_TOPOLOGY_TRIANGLE_STRIP;
-
-    m_Renderer->initalize();
-    m_Renderer->createPipeline();
-    m_Renderer->getPipeline()->initalize(info);
 }
 void Reactor::stopRenderer()
 {

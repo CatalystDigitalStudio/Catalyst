@@ -86,7 +86,7 @@ void VulkanRenderer::cleanup()
 
 void VulkanRenderer::createPipeline()
 {
-    m_Pipeline = std::make_shared<VulkanPipeline>(m_LogicalDevice, m_Surface);
+    m_Pipeline = std::make_shared<VulkanPipeline>(m_LogicalDevice, m_PhysicalDevice, m_Surface);
 }
 
 std::shared_ptr<Catalyst::IPipeline> VulkanRenderer::getPipeline()
@@ -245,10 +245,44 @@ uint32_t VulkanRenderer::scoreDeviceSuitability(VkPhysicalDevice& physicalDevice
     return score;
 }
 
+VkCommandBuffer VulkanRenderer::getCommandBuffer(bool begin)
+{
+    VkCommandBuffer cmdBuffer = {};
+
+    VkCommandBufferAllocateInfo cmdBufAllocateInfo = {};
+    cmdBufAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    cmdBufAllocateInfo.commandPool = cmdPool;
+    cmdBufAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    cmdBufAllocateInfo.commandBufferCount = 1;
+
+    if (vkAllocateCommandBuffers(m_LogicalDevice, &cmdBufAllocateInfo, &cmdBuffer) != VK_SUCCESS)
+    {
+        throw;
+    }
+
+    // If requested, also start the new command buffer
+    if (begin)
+    {
+        VkCommandBufferBeginInfo commandBufferBegin = {};
+
+        commandBufferBegin.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+        commandBufferBegin.pNext = nullptr;
+        commandBufferBegin.flags = 0;
+        commandBufferBegin.pInheritanceInfo = nullptr;
+
+        if (vkBeginCommandBuffer(cmdBuffer, &commandBufferBegin) != VK_SUCCESS)
+        {
+            throw;
+        }
+    }
+
+    return cmdBuffer;
+}
+
 #pragma warning(pop)
 
-VulkanPipeline::VulkanPipeline(VkDevice device, VkSurfaceKHR surface)
-    : m_Device(device), m_Surface(surface)
+VulkanPipeline::VulkanPipeline(VkDevice device, VkPhysicalDevice pDevice, VkSurfaceKHR surface)
+    : m_Device(device), m_PhysicalDevice(pDevice), m_Surface(surface)
 {
 }
 
@@ -287,8 +321,38 @@ VkShaderModule VulkanPipeline::createModule(std::string code)
 void VulkanPipeline::configurePipeline(Catalyst::CatalystShaderTopology topology, const uint32_t width, const uint32_t height)
 {
 
-    VkPipelineInputAssemblyStateCreateInfo assemblyInfo = {};
+    setupDynamicState(true, true, true, true);
+    setupInput(topology);
+    setupView(width, height);
+    setupRasterizer();
+    setupMultisample();
+    setupDepth();
+    setupBlending();
 
+
+}
+
+void VulkanPipeline::setupDynamicState(bool viewport, bool scissor, bool line_width, bool blend)
+{
+    std::vector<VkDynamicState> dynamicStates;
+
+    VkPipelineDynamicStateCreateInfo dynamicState = {};
+    dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+    dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
+    dynamicState.pDynamicStates = dynamicStates.data();
+
+}
+
+void VulkanPipeline::setupInput(Catalyst::CatalystShaderTopology topology)
+{
+    VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
+    vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    vertexInputInfo.vertexBindingDescriptionCount = 0;
+    vertexInputInfo.pVertexBindingDescriptions = nullptr;
+    vertexInputInfo.vertexAttributeDescriptionCount = 0;
+    vertexInputInfo.pVertexAttributeDescriptions = nullptr;
+
+    VkPipelineInputAssemblyStateCreateInfo assemblyInfo = {};
     assemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     assemblyInfo.pNext = nullptr;
     assemblyInfo.primitiveRestartEnable = VK_FALSE;
@@ -334,7 +398,56 @@ void VulkanPipeline::configurePipeline(Catalyst::CatalystShaderTopology topology
         throw std::runtime_error("Faulty primitive type");
     }
     }
+}
 
+void VulkanPipeline::setupView(const uint32_t width, const uint32_t height)
+{
+    VkViewport viewport{};
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = (float)width;
+    viewport.height = (float)height;
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+
+    VkRect2D scissor{};
+    scissor.offset = { 0, 0 };
+    scissor.extent = { width, height };
+
+    VkPipelineViewportStateCreateInfo viewportState{};
+    viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    viewportState.viewportCount = 1;
+    viewportState.pViewports = &viewport;
+    viewportState.scissorCount = 1;
+    viewportState.pScissors = &scissor;
+}
+
+void VulkanPipeline::setupRasterizer()
+{
+    VkPipelineRasterizationStateCreateInfo rasterizer{};
+    rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+    rasterizer.depthClampEnable = VK_FALSE;
+    rasterizer.rasterizerDiscardEnable = VK_FALSE;
+    rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+    rasterizer.lineWidth = 1.0f;
+    rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+    rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+    rasterizer.depthBiasEnable = VK_FALSE;
+    rasterizer.depthBiasConstantFactor = 0.0f; // Optional
+    rasterizer.depthBiasClamp = 0.0f; // Optional
+    rasterizer.depthBiasSlopeFactor = 0.0f; // Optional
+}
+
+void VulkanPipeline::setupMultisample()
+{
+}
+
+void VulkanPipeline::setupDepth()
+{
+}
+
+void VulkanPipeline::setupBlending()
+{
 }
 
 void VulkanPipeline::initalize(Catalyst::PipelineInformation information)
@@ -379,4 +492,37 @@ void VulkanPipeline::addStage(Catalyst::CatalystShaderStageType stageType, std::
 std::string VulkanPipeline::compileShader(std::string rawCode)
 {
     return std::string();
+}
+
+void VulkanImage::create(VkDevice device, uint32_t width, uint32_t height, uint32_t mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties)
+{
+    this->format = format;
+
+    VkImageViewCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+    createInfo.image = image;
+    createInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+    createInfo.format = format;
+    
+    createInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+    createInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+    createInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+    createInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+
+    createInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    createInfo.subresourceRange.baseMipLevel = 0;
+    createInfo.subresourceRange.levelCount = 1;
+    createInfo.subresourceRange.baseArrayLayer = 0;
+    createInfo.subresourceRange.layerCount = 1;
+
+    if (vkCreateImageView(device, &createInfo, nullptr, &view) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create image views!");
+    }
+}
+
+void VulkanImage::destroy(VkDevice device)
+{
+    vkDestroyImageView(device, view, nullptr);
+    vkDestroyImage(device, image, nullptr);
+    vkFreeMemory(device, memory, nullptr);
 }

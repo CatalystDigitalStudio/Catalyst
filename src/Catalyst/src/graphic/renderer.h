@@ -159,3 +159,29 @@ namespace Catalyst
 
     using CatalystPtrRenderer = IRenderer*;
 }
+
+/*
+ * Instance +               Models ----+--- Textetures
+ *          |                          |
+ *       Device ------> Memory --------+--------------+--- Memory Barriers
+ *          |            |                            |
+ *       Queues  +-- CommandPool   Descriptor Pool  Buffers
+ *          |    |       |                |           |
+ *          +    |       |                |          View ---------------------------+
+ *          |    |       |                |           |                              |
+ *       Family--+       |                +-- Descriptor Set / Update Current Set    |
+ *                   Command Buffer       |                                          |
+ *                       |                |                                          |
+ *                       +----------------+------------------------------------ Framebuffers
+ *                       |
+ *                    Render()
+ *               (Populate cmd buffer, Setup Sync, Render)
+ * 
+ * NOTE This doesn't include the pipeline, constants, or layouts.
+ * 
+*/
+
+
+
+
+

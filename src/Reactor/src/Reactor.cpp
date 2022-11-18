@@ -109,37 +109,105 @@ Reactor::~Reactor()
 }
 void Reactor::Run()
 {
-    CATALYST_PROFILE_FUNCTION(nullptr);
 
+
+    Catalyst::RendererInfo rInfo = {};
+
+    rInfo.type = Catalyst::CATALYST_RENDERER_TYPE_VULKAN;
+    rInfo.flags = (Catalyst::CATALYST_RENDERER_FLAG_DEVICE_DEFAULT | Catalyst::CATALYST_RENDERER_FLAG_DOUBLE_BUFFER);
+
+    
     auto surface = Catalyst::Engine::createSurface({ "REACTOR" });
 
-    startRenderer(surface);
+    m_Renderer.reset(Catalyst::Engine::createRenderer(surface, rInfo));
 
-    std::thread logThread(ReactorFrameLogger);
-    Catalyst::Profiler profiler("Main loop");
+    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    /*                      PIPELINE                          */
 
-    launchScene<TestScene>();
 
-    while (!close())
+    Catalyst::PipelineInformation info = {};
+
+    info.cullDirection = Catalyst::CATALYST_SHADER_CULL_DIRECTION_CLOCKWISE;
+    info.cullFace = Catalyst::CATALYST_SHADER_CULL_FACE_BACK;
+    info.topology = Catalyst::CATALYST_SHADER_TOPOLOGY_TRIANGLE_STRIP;
+
+    m_Renderer->initalize();
+
+    // Catalyst::PipelineID id = m_Renderer->createPipeline();
+    // Catalyst::PipelinePtr pipeline = m_Renderer->getPipeline(id)
+    /*
+    
+    pipline->initalize(info);
+
+    Catalyst::ShaderModule module = {};
+
+    module...
+
+    pipeline->createModule(module, ...);
+    
+    */
+
+    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    /*                        MEMORY                          */
+
+    //auto image = Catalyst::Engine::requestAsset<Catalyst::Image>("assets/image.png");
+    //
+    //renderer->bindTexture(image, 0);
+
+    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    while (true)
     {
-        profiler.start();
 
-        getScene()->onUpdate();
+        /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+        /*                      COMMANDS                          */
 
-        std::this_thread::sleep_for(10ms); //To save battery and resources on laptop rn. LOL!
+        auto command = std::make_shared<Catalyst::BindPipelineCommand>(m_Renderer->getPipeline());
 
-        Catalyst::Engine::updateEngine();
+        m_Renderer->getCommandPool().add(std::static_pointer_cast<Catalyst::RenderCommandBase>(command));
 
-        profiler.stop();
-        m_LastFrameTime = profiler.count();
-        m_Done.notify_all();
+        /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+        auto sync_object = m_Renderer->render();
+
+
+        //m_Renderer->wait(sync_object);
+
     }
 
-    closeScene();
 
-    stopRenderer();
-
-    logThread.join();
+    //CATALYST_PROFILE_FUNCTION(nullptr);
+    //
+    //auto surface = Catalyst::Engine::createSurface({ "REACTOR" });
+    //
+    //startRenderer(surface);
+    //
+    //std::thread logThread(ReactorFrameLogger);
+    //Catalyst::Profiler profiler("Main loop");
+    //
+    ////launchScene<TestScene>();
+    //
+    //while (!close())
+    //{
+    //    profiler.start();
+    //
+    //    //getScene()->onUpdate();
+    //
+    //    getRenderer()->~IRenderer();
+    //
+    //    std::this_thread::sleep_for(10ms); //To save battery and resources on laptop rn. LOL!
+    //
+    //    Catalyst::Engine::updateEngine();
+    //
+    //    profiler.stop();
+    //    m_LastFrameTime = profiler.count();
+    //    m_Done.notify_all();
+    //}
+    //
+    ////closeScene();
+    //
+    //stopRenderer();
+    //
+    //logThread.join();
 }
 
 bool Reactor::onEvent(TestEvent&& event)

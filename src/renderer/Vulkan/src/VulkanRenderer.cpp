@@ -88,14 +88,22 @@ void VulkanRenderer::render()
 {
 }
 
-void VulkanRenderer::createPipeline()
+Catalyst::PipelineID VulkanRenderer::createPipeline(Catalyst::PipelineInformation information)
 {
-    m_Pipeline = std::make_shared<VulkanPipeline>(m_LogicalDevice, m_PhysicalDevice, m_Surface);
+    Catalyst::PipelineID id = m_Pipelines.size();
+    m_Pipelines[id] = std::make_shared<VulkanPipeline>(m_LogicalDevice, m_PhysicalDevice, m_Surface);
+    getPipeline(id)->initalize(information);
+    return id;
 }
 
-std::shared_ptr<Catalyst::IPipeline> VulkanRenderer::getPipeline()
+std::shared_ptr<Catalyst::IPipeline> VulkanRenderer::getPipeline(Catalyst::PipelineID id)
 {
-    return std::static_pointer_cast<Catalyst::IPipeline>(m_Pipeline);
+    return std::static_pointer_cast<Catalyst::IPipeline>(m_Pipelines[id]);
+}
+
+constexpr Catalyst::CommandPool& VulkanRenderer::getCommandPool()
+{
+    return m_Pool;
 }
 
 void VulkanRenderer::createInstance()

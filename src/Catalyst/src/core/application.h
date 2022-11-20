@@ -35,7 +35,7 @@ namespace Catalyst
          * Pure virtual, your main function.
          *
          */
-        virtual void Run() = 0;
+        virtual void onRun() = 0;
 
     public:
         /**
@@ -144,7 +144,7 @@ namespace Catalyst
         if(!IApplication::get())
             return CatalystResult::IApplication_Failed_Creation;
 
-        IApplication::get()->Run();
+        IApplication::get()->onRun();
 
         if (IApplication::get()->s_Reload)
             return CatalystResult::IApplication_Recreation_Request;

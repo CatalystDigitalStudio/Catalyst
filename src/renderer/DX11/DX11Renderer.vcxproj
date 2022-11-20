@@ -141,15 +141,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Catalyst\Catalyst.vcxproj">
-      <Project>{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\DX11Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\DX11Renderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Catalyst\Catalyst.vcxproj">
+      <Project>{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

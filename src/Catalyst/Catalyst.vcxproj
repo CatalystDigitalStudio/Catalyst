@@ -142,9 +142,9 @@
     <ClInclude Include="platform\Platform.h" />
     <ClInclude Include="platform\windows\Windows.h" />
     <ClInclude Include="platform\windows\windowsSurface.h" />
-    <ClInclude Include="src\core\engine.h" />
     <ClInclude Include="src\core\Profiling.h" />
     <ClInclude Include="src\core\application.h" />
+    <ClInclude Include="src\core\engine.h" />
     <ClInclude Include="src\core\entry.h" />
     <ClInclude Include="src\core\events.h" />
     <ClInclude Include="src\core\internal.h" />
@@ -156,9 +156,9 @@
     <ClInclude Include="src\core\version.h" />
     <ClInclude Include="src\files\file.h" />
     <ClInclude Include="src\files\parsing.h" />
+    <ClInclude Include="src\graphic\commands.h" />
     <ClInclude Include="src\graphic\font.h" />
     <ClInclude Include="src\graphic\image.h" />
-    <ClInclude Include="src\graphic\commands.h" />
     <ClInclude Include="src\graphic\renderer.h" />
     <ClInclude Include="src\graphic\surface.h" />
     <ClInclude Include="src\managment\assets.h" />
@@ -170,9 +170,9 @@
     <ClCompile Include="platform\Platform.cpp" />
     <ClCompile Include="platform\windows\Windows.cpp" />
     <ClCompile Include="platform\windows\windowsSurface.cpp" />
-    <ClCompile Include="src\core\engine.cpp" />
     <ClCompile Include="src\core\Profiling.cpp" />
     <ClCompile Include="src\core\application.cpp" />
+    <ClCompile Include="src\core\engine.cpp" />
     <ClCompile Include="src\core\events.cpp" />
     <ClCompile Include="src\core\internal.cpp" />
     <ClCompile Include="src\core\logging.cpp" />

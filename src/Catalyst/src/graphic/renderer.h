@@ -94,6 +94,11 @@ namespace Catalyst
     };
 
     /**
+     * .
+     */
+    typedef unsigned int PipelineID;
+
+    /**
      * Pipeline(Shader)
      * 
      * @brief An object used to contain and work on a pipeline.
@@ -132,6 +137,8 @@ namespace Catalyst
 
     };
 
+    using PipelinePtr = std::shared_ptr<IPipeline>;
+
     class CATALYST_API ISwapChain
     {
 
@@ -159,8 +166,8 @@ namespace Catalyst
 
         virtual void render() = 0;
 
-        virtual void createPipeline() = 0;
-        virtual std::shared_ptr<IPipeline> getPipeline() = 0;
+        virtual PipelineID createPipeline(PipelineInformation) = 0;
+        virtual std::shared_ptr<IPipeline> getPipeline(PipelineID) = 0;
 
         virtual constexpr CommandPool& getCommandPool() = 0;
     

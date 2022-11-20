@@ -34,70 +34,70 @@ void ReactorFrameLogger()
 }
 
 
-struct TestScene : public Catalyst::Scene
-{
+//struct TestScene : public Catalyst::Scene
+//{
+//
+//    TestScene(Catalyst::IApplication* app)
+//        : Scene("TestScene", app)
+//    {
+//
+//    }
+//
+//    ~TestScene() = default;
+//
+//    virtual void onCreate() override
+//    {
+//        auto renderer = getApplication<Reactor>()->getRenderer();
+//
+//        
+//        Catalyst::PipelineInformation info = {};
+//
+//        info.cullDirection = Catalyst::CATALYST_SHADER_CULL_DIRECTION_CLOCKWISE;
+//        info.cullFace = Catalyst::CATALYST_SHADER_CULL_FACE_BACK;
+//        info.topology = Catalyst::CATALYST_SHADER_TOPOLOGY_TRIANGLE_STRIP;
+//
+//        renderer->initalize();
+//        renderer->createPipeline();
+//        renderer->getPipeline()->initalize(info);
+//    }
+//    virtual void onUpdate() override
+//    {
+//
+//        auto image = Catalyst::Engine::requestAsset<Catalyst::Image>("assets/image.png");
+//
+//        CATALYST_ASSET_EXISTS(image)
+//        {
+//
+//        }
+//
+//        auto renderer = getApplication<Reactor>()->getRenderer();
+//
+//        //renderer->submit(model, material, ...);
+//        //renderer->render();
+//
+//
+//    }
+//    virtual void onDestroy() override
+//    {
+//
+//    }
+//};
 
-    TestScene(Catalyst::IApplication* app)
-        : Scene("TestScene", app)
-    {
-
-    }
-
-    ~TestScene() = default;
-
-    virtual void onCreate() override
-    {
-        auto renderer = getApplication<Reactor>()->getRenderer();
-
-
-        Catalyst::PipelineInformation info = {};
-
-        info.cullDirection = Catalyst::CATALYST_SHADER_CULL_DIRECTION_CLOCKWISE;
-        info.cullFace = Catalyst::CATALYST_SHADER_CULL_FACE_BACK;
-        info.topology = Catalyst::CATALYST_SHADER_TOPOLOGY_TRIANGLE_STRIP;
-
-        renderer->initalize();
-        renderer->createPipeline();
-        renderer->getPipeline()->initalize(info);
-    }
-    virtual void onUpdate() override
-    {
-
-        auto image = Catalyst::Engine::requestAsset<Catalyst::Image>("assets/image.png");
-
-        CATALYST_ASSET_EXISTS(image)
-        {
-
-        }
-
-        auto renderer = getApplication<Reactor>()->getRenderer();
-
-        //renderer->submit(model, material, ...);
-        //renderer->render();
-
-
-    }
-    virtual void onDestroy() override
-    {
-
-    }
-};
-
-void Reactor::startRenderer(Catalyst::CatalystPtrSurface surface)
-{
-
-    Catalyst::RendererInfo rInfo = {};
-
-    rInfo.type = Catalyst::CATALYST_RENDERER_TYPE_VULKAN;
-    rInfo.flags = (Catalyst::CATALYST_RENDERER_FLAG_DEVICE_DEFAULT | Catalyst::CATALYST_RENDERER_FLAG_DOUBLE_BUFFER);
-
-    m_Renderer.reset(Catalyst::Engine::createRenderer(surface, rInfo));
-
-}
-void Reactor::stopRenderer()
-{
-    m_Renderer->cleanup();
-}
+//void Reactor::startRenderer(Catalyst::CatalystPtrSurface surface)
+//{
+//
+//    Catalyst::RendererInfo rInfo = {};
+//
+//    rInfo.type = Catalyst::CATALYST_RENDERER_TYPE_VULKAN;
+//    rInfo.flags = (Catalyst::CATALYST_RENDERER_FLAG_DEVICE_DEFAULT | Catalyst::CATALYST_RENDERER_FLAG_DOUBLE_BUFFER);
+//
+//    m_Renderer.reset(Catalyst::Engine::createRenderer(surface, rInfo));
+//
+//}
+//void Reactor::stopRenderer()
+//{
+//    m_Renderer->cleanup();
+//}
 
 Reactor::Reactor()
     : Catalyst::IApplication("Reactor")
@@ -107,7 +107,7 @@ Reactor::Reactor()
 Reactor::~Reactor()
 {
 }
-void Reactor::Run()
+void Reactor::onRun()
 {
 
 
@@ -133,8 +133,8 @@ void Reactor::Run()
 
     m_Renderer->initalize();
 
-    // Catalyst::PipelineID id = m_Renderer->createPipeline();
-    // Catalyst::PipelinePtr pipeline = m_Renderer->getPipeline(id)
+    Catalyst::PipelineID id = m_Renderer->createPipeline(info);
+    Catalyst::PipelinePtr pipeline = m_Renderer->getPipeline(id);
     /*
     
     pipline->initalize(info);
@@ -155,14 +155,15 @@ void Reactor::Run()
     //renderer->bindTexture(image, 0);
 
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-    while (true)
+    while (! close())
     {
 
         /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
         /*                      COMMANDS                          */
 
-        auto command = std::make_shared<Catalyst::BindPipelineCommand>(m_Renderer->getPipeline());
+        auto command = std::make_shared<Catalyst::BindPipelineCommand>(m_Renderer->getPipeline(id));
 
+        m_Renderer->getCommandPool().reserve(10);
         m_Renderer->getCommandPool().add(std::static_pointer_cast<Catalyst::RenderCommandBase>(command));
 
         /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/

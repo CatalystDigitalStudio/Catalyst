@@ -28,17 +28,17 @@ namespace Catalyst
 
     struct BindPipelineCommand : public RenderCommand<CATALYST_RENDER_COMMAND_BIND_PIPELINE>
     {
-        BindPipelineCommand(std::shared_ptr<Catalyst::IPipeline> pipeline)
-            : pipeline(pipeline)
-        {
+        //BindPipelineCommand(std::shared_ptr<Catalyst::IPipeline> pipeline)
+        //    : pipeline(pipeline)
+        //{
+        //
+        //}
+        //~BindPipelineCommand()
+        //{
+        //
+        //}
 
-        }
-        ~BindPipelineCommand()
-        {
-
-        }
-
-        std::shared_ptr<Catalyst::IPipeline> pipeline;
+        Catalyst::PipelineID id = 0;
     };
 
 
@@ -49,7 +49,9 @@ namespace Catalyst
         CommandPool();
         ~CommandPool();
 
-        void add(std::shared_ptr<RenderCommandBase>);
+        void add(std::shared_ptr<RenderCommandBase> command);
+        void reserve(unsigned int amount);
+        void flush();
         
     private:
         friend class IRenderer;

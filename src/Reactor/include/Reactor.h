@@ -25,7 +25,7 @@ private:
     void stopRenderer();
 
 private:
-    virtual void Run() override;
+    virtual void onRun() override;
 
     virtual bool onEvent(TestEvent&& event) override;
 

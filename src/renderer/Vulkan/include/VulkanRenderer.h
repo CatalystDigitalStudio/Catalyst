@@ -83,8 +83,10 @@ public:
 
     virtual void render() override;
 
-    virtual void createPipeline() override;
-    virtual std::shared_ptr<Catalyst::IPipeline> getPipeline() override;
+    virtual Catalyst::PipelineID createPipeline(Catalyst::PipelineInformation) override;
+    virtual std::shared_ptr<Catalyst::IPipeline> getPipeline(Catalyst::PipelineID) override;
+
+    virtual constexpr Catalyst::CommandPool& getCommandPool() override;
 
     VkCommandBuffer getCommandBuffer(bool begin);
 
@@ -106,6 +108,7 @@ private:
     VkFormat m_ColorFormat;
     VkColorSpaceKHR m_ColorSpace;
 
-    std::unordered_map<uint32_t, std::shared_ptr<VulkanPipeline>> m_Pipelines;
+    std::unordered_map<Catalyst::PipelineID, std::shared_ptr<VulkanPipeline>> m_Pipelines;
+    Catalyst::CommandPool m_Pool;
     std::deque<void*> m_CatalystCommandBuffer;
 };

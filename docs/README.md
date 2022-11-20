@@ -21,8 +21,6 @@ Variables use a prefix with lower [camelCase](https://en.wikipedia.org/wiki/Came
 
 ### Getting Started
 
-{% tabs %}
-{% tab title="Application" %}
 ## [IApplication](classes/iapplication.md)
 
 #### Example.h
@@ -106,14 +104,5 @@ void ExampleApplication::onRun()
 ```
 
 Next, we can signal the application to close by using the same `close()` function. However, instead of getting the return of the function we can provide it with a boolean.
-{% endtab %}
 
-{% tab title="Scenes" %}
-
-{% endtab %}
-
-{% tab title="Render" %}
-
-{% endtab %}
-{% endtabs %}
 

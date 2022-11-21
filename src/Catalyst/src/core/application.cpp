@@ -5,7 +5,7 @@ namespace Catalyst
 {
     std::atomic<std::shared_ptr<IApplication>> IApplication::s_Instance;
     std::atomic_bool IApplication::s_Reload;
-    std::unique_ptr<Scene> m_Scene;
+    std::unique_ptr<Scene> IApplication::m_Scene;
 
     IApplication::IApplication(const char* process_name)
         : m_Name(process_name), m_Close(false)

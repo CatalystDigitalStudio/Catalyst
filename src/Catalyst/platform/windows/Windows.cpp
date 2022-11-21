@@ -7,7 +7,7 @@
 
 namespace Catalyst
 {
-    typedef CatalystResult(*createRnederer)(IRenderer**, RendererInfo);
+    typedef CatalystResult(*createRnederer)(IRenderer**, Catalyst::CatalystPtrSurface, RendererInfo);
 
     PlatformData WindowsPlatform::getPlatformData()
     {
@@ -27,7 +27,7 @@ namespace Catalyst
 
         createRnederer fn = (createRnederer)GetProcAddress(module, "createRenderer");
         
-        auto result = fn(&renderer, info);
+        auto result = fn(&renderer, surface, info);
 
         if (result != CatalystResult::Success)
         {

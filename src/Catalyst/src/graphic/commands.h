@@ -8,6 +8,8 @@ namespace Catalyst
     class IPipeline;
     class IRenderer;
 
+    typedef unsigned int PipelineID;
+
     enum RenderCommandType
     {
 
@@ -28,15 +30,15 @@ namespace Catalyst
 
     struct BindPipelineCommand : public RenderCommand<CATALYST_RENDER_COMMAND_BIND_PIPELINE>
     {
-        //BindPipelineCommand(std::shared_ptr<Catalyst::IPipeline> pipeline)
-        //    : pipeline(pipeline)
-        //{
-        //
-        //}
-        //~BindPipelineCommand()
-        //{
-        //
-        //}
+        BindPipelineCommand(Catalyst::PipelineID id)
+            : id(id)
+        {
+        
+        }
+        ~BindPipelineCommand()
+        {
+        
+        }
 
         Catalyst::PipelineID id = 0;
     };

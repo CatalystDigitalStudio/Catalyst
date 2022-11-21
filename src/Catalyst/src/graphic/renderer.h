@@ -103,7 +103,7 @@ namespace Catalyst
      * 
      * @brief An object used to contain and work on a pipeline.
      */
-    class IPipeline
+    class CATALYST_API IPipeline
     {
 
     public:

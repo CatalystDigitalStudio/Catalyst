@@ -11,9 +11,9 @@
 #pragma warning(push)
 #pragma warning(disable:26812)
 
-extern "C" CATALYST_API Catalyst::CatalystResult createRenderer(Catalyst::CatalystPtrRenderer renderer, Catalyst::CatalystPtrSurface surface, Catalyst::RendererInfo info)
+extern "C" CATALYST_API Catalyst::CatalystResult createRenderer(Catalyst::CatalystPtrRenderer* renderer, Catalyst::CatalystPtrSurface surface, Catalyst::RendererInfo info)
 {
-    renderer = new VulkanRenderer(surface, info);
+    *renderer = new VulkanRenderer(surface, info);
     if (renderer)
     {
         return Catalyst::CatalystResult::Success;
@@ -112,7 +112,7 @@ void VulkanRenderer::createInstance()
     VkApplicationInfo appInfo = {};
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
     appInfo.pNext = NULL;
-    appInfo.pApplicationName = Catalyst::IApplication::get()->name();
+    //appInfo.pApplicationName = Catalyst::IApplication::get()->name();
     appInfo.pEngineName = "Catalyst";
     appInfo.apiVersion = VK_MAKE_VERSION(1, 0, 3);
 
@@ -263,7 +263,7 @@ VkCommandBuffer VulkanRenderer::getCommandBuffer(bool begin)
 
     VkCommandBufferAllocateInfo cmdBufAllocateInfo = {};
     cmdBufAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    cmdBufAllocateInfo.commandPool = cmdPool;
+    //cmdBufAllocateInfo.commandPool = cmdPool;
     cmdBufAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     cmdBufAllocateInfo.commandBufferCount = 1;
 

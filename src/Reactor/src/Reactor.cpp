@@ -114,7 +114,7 @@ void Reactor::onRun()
     Catalyst::RendererInfo rInfo = {};
 
     rInfo.type = Catalyst::CATALYST_RENDERER_TYPE_VULKAN;
-    rInfo.flags = (Catalyst::CATALYST_RENDERER_FLAG_DEVICE_DEFAULT | Catalyst::CATALYST_RENDERER_FLAG_DOUBLE_BUFFER);
+    rInfo.flags = (Catalyst::CATALYST_RENDERER_FLAG_DEVICE_DEFAULT | Catalyst::CATALYST_RENDERER_FLAG_HEADLESS);
 
     
     auto surface = Catalyst::Engine::createSurface({ "REACTOR" });
@@ -155,24 +155,29 @@ void Reactor::onRun()
     //renderer->bindTexture(image, 0);
 
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+    auto command = std::make_shared<Catalyst::BindPipelineCommand>(id);
+
+    m_Renderer->getCommandPool().reserve(10);
     while (! close())
     {
 
         /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
         /*                      COMMANDS                          */
 
-        auto command = std::make_shared<Catalyst::BindPipelineCommand>(m_Renderer->getPipeline(id));
-
-        m_Renderer->getCommandPool().reserve(10);
         m_Renderer->getCommandPool().add(std::static_pointer_cast<Catalyst::RenderCommandBase>(command));
+
+        m_Renderer->getCommandPool().flush();
 
         /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-        auto sync_object = m_Renderer->render();
+        //auto sync_object = m_Renderer->render();
 
 
         //m_Renderer->wait(sync_object);
 
+        surface->update();
+        std::this_thread::sleep_for(10ms); //To save resources
     }
 
 

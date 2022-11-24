@@ -132,9 +132,6 @@ namespace Catalyst
          */
         virtual std::string compileShader(std::string rawCode) = 0;
 
-    private:
-        std::vector<std::string> m_ByteCodes;
-
     };
 
     using PipelinePtr = std::shared_ptr<IPipeline>;
@@ -155,6 +152,20 @@ namespace Catalyst
         int flags = (CATALYST_RENDERER_FLAG_DEVICE_DEFAULT | CATALYST_RENDERER_FLAG_DOUBLE_BUFFER);
     };
 
+    class CATALYST_API IDevice
+    {
+
+    public:
+        IDevice(const std::string& name);
+        virtual ~IDevice() = default;
+
+        const std::string& getName() const;
+
+    private:
+        const std::string m_Name;
+
+    };
+
     class CATALYST_API IRenderer
     {
 
@@ -166,6 +177,10 @@ namespace Catalyst
 
         virtual void render() = 0;
 
+    public:
+        virtual const std::vector<IDevice*> getDeviceList() = 0;
+
+    public:
         virtual PipelineID createPipeline(PipelineInformation) = 0;
         virtual std::shared_ptr<IPipeline> getPipeline(PipelineID) = 0;
 
@@ -180,27 +195,6 @@ namespace Catalyst
 
     using CatalystPtrRenderer = IRenderer*;
 }
-
-/*
- * Instance +               Models ----+--- Textetures
- *          |                          |
- *       Device ------> Memory --------+--------------+--- Memory Barriers
- *          |            |                            |
- *       Queues  +-- CommandPool   Descriptor Pool  Buffers
- *          |    |       |                |           |
- *          +    |       |                |          View ---------------------------+
- *          |    |       |                |           |                              |
- *       Family--+       |                +-- Descriptor Set / Update Current Set    |
- *                   Command Buffer       |                                          |
- *                       |                |                                          |
- *                       +----------------+------------------------------------ Framebuffers
- *                       |
- *                    Render()
- *               (Populate cmd buffer, Setup Sync, Render)
- * 
- * NOTE This doesn't include the pipeline, constants, or layouts.
- * 
-*/
 
 
 

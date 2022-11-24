@@ -34,7 +34,7 @@ namespace Catalyst
         void start();
         void stop();
 
-        long long count();
+        std::chrono::nanoseconds count();
 
         void log();
 
@@ -49,11 +49,11 @@ namespace Catalyst
     {
 
     public:
-        explicit ProfileFunction(const char* function_name, size_t* result);
+        explicit ProfileFunction(const char* function_name, std::chrono::nanoseconds* result);
         ~ProfileFunction();
     private:
         Profiler m_Profile;
-        size_t* m_Result;
+        std::chrono::nanoseconds* m_Result;
 
     };
 

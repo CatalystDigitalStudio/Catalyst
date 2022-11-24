@@ -20,8 +20,6 @@ namespace Catalyst
 
     public:
         virtual PlatformData getPlatformData() override;
-
-        virtual IRenderer* createRenderer(std::string, CatalystPtrSurface, RendererInfo) override;
         virtual CatalystPtrSurface createSurface(SurfaceData) override;
 
     private:

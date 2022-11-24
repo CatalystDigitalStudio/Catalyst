@@ -7,35 +7,10 @@
 
 namespace Catalyst
 {
-    typedef CatalystResult(*createRnederer)(IRenderer**, Catalyst::CatalystPtrSurface, RendererInfo);
 
     PlatformData WindowsPlatform::getPlatformData()
     {
         return data;
-    }
-
-    CatalystPtrRenderer WindowsPlatform::createRenderer(std::string path, CatalystPtrSurface surface, RendererInfo info)
-    {
-        CatalystPtrRenderer renderer = nullptr;
-
-        HMODULE module = LoadLibraryA(path.c_str());
-        if (!module)
-        {
-            Engine::raiseError({ Level::Error, "[CATALYST] [RENDERER] Failed to load renderer module!" });
-            return renderer;
-        }
-
-        createRnederer fn = (createRnederer)GetProcAddress(module, "createRenderer");
-        
-        auto result = fn(&renderer, surface, info);
-
-        if (result != CatalystResult::Success)
-        {
-            delete renderer;
-            Engine::raiseError({ Level::Error, "[CATALYST] [RENDERER] Failed to load renderer!" });
-        }
-
-        return renderer;
     }
 
     CatalystPtrSurface WindowsPlatform::createSurface(SurfaceData data)

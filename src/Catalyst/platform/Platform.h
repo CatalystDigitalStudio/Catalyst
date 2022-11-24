@@ -19,7 +19,6 @@ namespace Catalyst
     public:
         virtual PlatformData getPlatformData() = 0;
 
-        virtual CatalystPtrRenderer createRenderer(std::string, CatalystPtrSurface, RendererInfo) = 0;
         virtual CatalystPtrSurface createSurface(SurfaceData) = 0;
 
     };

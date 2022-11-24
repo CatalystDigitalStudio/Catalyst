@@ -11,5 +11,13 @@ namespace Catalyst
     {
 
     }
+    IDevice::IDevice(const std::string& name)
+        : m_Name(name)
+    {
+    }
+    const std::string& IDevice::getName() const
+    {
+        return m_Name;
+    }
 }
 

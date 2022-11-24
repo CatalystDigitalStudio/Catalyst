@@ -3,7 +3,7 @@
 -- Catalyst
 -- -----------------------------------------------
 project "VulkanRenderer"
-    kind "SharedLib"
+    kind "StaticLib"
     language "C++"
 	cppdialect "C++latest"
 	staticruntime "off"
@@ -27,9 +27,7 @@ project "VulkanRenderer"
     }
     
     defines {
-        "CATALYST_CORE",
-        "CATALYST_EXPORT",
-        "CATALYST_DLL"
+        "CATALYST_CORE"
     }
 
     includedirs{
@@ -45,7 +43,6 @@ project "VulkanRenderer"
     }
 
     links {
-        "Catalyst",
         "%{Library.Vulkan}",
         "%{Library.VulkanUtils}"
     }

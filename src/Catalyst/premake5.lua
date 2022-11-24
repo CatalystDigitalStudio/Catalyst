@@ -15,20 +15,21 @@ project "Catalyst"
     pchsource "src/pch.cpp"
     
     files {
-         "include/**.h",  -- Main files that can be included by clients
-         "src/**.h",      -- Core files
-         "src/**.c",      -- Core files
-         "src/**.cpp",    -- Core files
-         "src/**.hpp",    -- Core files
-         "src/**.inl",    -- Core files
+         "include/**.h",                       -- Main files that can be included by clients
 
-         "platform/Platform.h",      -- Core files
-         "platform/Platform.cpp",      -- Core files
-         "platform/%{cfg.platform}/**.h",      -- Core files
-         "platform/%{cfg.platform}/**.c",      -- Core files
-         "platform/%{cfg.platform}/**.cpp",    -- Core files
-         "platform/%{cfg.platform}/**.hpp",    -- Core files
-         "platform/%{cfg.platform}/**.inl"     -- Core files
+         "src/**.h",                           -- Core files
+         "src/**.c",                           -- Core files
+         "src/**.cpp",                         -- Core files
+         "src/**.hpp",                         -- Core files
+         "src/**.inl",                         -- Core files
+
+         "platform/Platform.h",                -- Core platform files
+         "platform/Platform.cpp",              -- Core platform files
+         "platform/%{cfg.platform}/**.h",      -- Core platform files
+         "platform/%{cfg.platform}/**.c",      -- Core platform files
+         "platform/%{cfg.platform}/**.cpp",    -- Core platform files
+         "platform/%{cfg.platform}/**.hpp",    -- Core platform files
+         "platform/%{cfg.platform}/**.inl"     -- Core platform files
     }
     
     defines {
@@ -43,7 +44,8 @@ project "Catalyst"
     }
     
     links {
-        "zlib"
+        "zlib",
+        "VulkanRenderer"
     }
     
     filter "system:windows"

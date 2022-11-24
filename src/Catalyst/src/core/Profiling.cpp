@@ -34,19 +34,19 @@ namespace Catalyst
     {
         m_Stop = clock::now();
     }
-    long long Profiler::count()
+    std::chrono::nanoseconds Profiler::count()
     {
-        return (m_Stop - m_Start).count();
+        return (m_Stop - m_Start);
     }
     void Profiler::log()
     {
 #ifdef CATALYST_PROFILE_LOG_CSV
-        s_Logger->info("\"{0}\",\"{1}\",\"{2}\"", Engine::getTickCount(), m_Name, this->count());
+        s_Logger->info("\"{0}\",\"{1}\",\"{2}\"", Engine::getTickCount(), m_Name, this->count().count());
 #else
-        s_Logger->info("[Function - {0}] - {1}", m_Name, this->count());
+        s_Logger->info("[Function - {0}] - {1}", m_Name, this->count().count());
 #endif
     }
-    ProfileFunction::ProfileFunction(const char* function_name, size_t* result)
+    ProfileFunction::ProfileFunction(const char* function_name, std::chrono::nanoseconds* result)
         : m_Profile(function_name), m_Result(result)
     {
         m_Profile.start();
@@ -56,7 +56,7 @@ namespace Catalyst
         m_Profile.stop();
 
         if(m_Result)
-            *m_Result = (size_t)m_Profile.count();
+            *m_Result = m_Profile.count();
          
         m_Profile.log();
     }

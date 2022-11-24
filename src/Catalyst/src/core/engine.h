@@ -10,7 +10,7 @@
 namespace Catalyst
 {
 
-    class CATALYST_API Engine
+    class Engine
     {
 
     public:

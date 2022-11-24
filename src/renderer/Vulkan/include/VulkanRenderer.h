@@ -30,11 +30,42 @@ struct VulkanImage
 
 };
 
+class CATALYST_API VulkanDevice
+{
+
+    struct QueueSupport
+    {
+        uint32_t index = -1;
+        bool supportsSurface = false;
+    };
+
+public:
+    VulkanDevice();
+    VulkanDevice(VkInstance instance, const VkPhysicalDeviceFeatures& features, float queuePriority, bool debug, const std::vector<const char*>& layers, VkPhysicalDevice m_Preselection = VK_NULL_HANDLE);
+    ~VulkanDevice();
+
+private:
+    bool isDeviceSuitable(VkPhysicalDevice device);
+    QueueSupport getQueueFamiliesSupport(VkPhysicalDevice device, VkSurfaceKHR surface);
+
+public:
+    VkInstance      m_Instance = VK_NULL_HANDLE;
+
+    VkPhysicalDevice           m_PhysicalDevice = VK_NULL_HANDLE;
+    VkPhysicalDeviceProperties m_DeviceProperties;
+    VkPhysicalDeviceFeatures   m_DeviceFeatures;
+
+    VkDevice                             m_Device = VK_NULL_HANDLE;
+
+    VkQueue m_GraphicsQueue = VK_NULL_HANDLE;
+    VkQueue m_PresentQueue = VK_NULL_HANDLE;
+};
+
 class CATALYST_API VulkanPipeline : public Catalyst::IPipeline
 {
 
 public:
-    VulkanPipeline(VkDevice device, VkPhysicalDevice pDevice, VkSurfaceKHR surface);
+    VulkanPipeline(std::shared_ptr<VulkanDevice> device, VkSurfaceKHR surface);
     ~VulkanPipeline();
 
     VkShaderModule createModule(std::string code);
@@ -58,8 +89,7 @@ private:
     virtual std::string compileShader(std::string rawCode) override;
 
 private:
-    VkDevice m_Device;
-    VkPhysicalDevice m_PhysicalDevice;
+    std::shared_ptr<VulkanDevice> m_Device;
     VkSurfaceKHR m_Surface;
 
     VkViewport m_Viewport     = {};
@@ -75,40 +105,122 @@ class CATALYST_API VulkanRenderer : public Catalyst::IRenderer
 {
 
 public:
+    ///==========================================================================================
+    ///  VulkanRenderer
+    ///==========================================================================================
+    
+    /**
+     * Initalization.
+     * 
+     * \param surface - Surface for swapchain, can be null if flag 'CATALYST_RENDERER_FLAG_HEADLESS' is used.
+     * \param info - Initalization info.
+     */
     VulkanRenderer(Catalyst::CatalystPtrSurface surface, Catalyst::RendererInfo info);
     ~VulkanRenderer();
 
+
+    ///==========================================================================================
+    ///  Overloads
+    ///==========================================================================================
+    
     virtual void initalize() override;
     virtual void cleanup() override;
 
     virtual void render() override;
 
+
+    virtual const std::vector<Catalyst::IDevice*> getDeviceList() override;
+
+    ///==========================================================================================
+    ///  Pipeline
+    ///==========================================================================================
+    
     virtual Catalyst::PipelineID createPipeline(Catalyst::PipelineInformation) override;
     virtual std::shared_ptr<Catalyst::IPipeline> getPipeline(Catalyst::PipelineID) override;
+
+    ///==========================================================================================
+    ///  Command Pool
+    ///==========================================================================================
 
     virtual constexpr Catalyst::CommandPool& getCommandPool() override;
 
     VkCommandBuffer getCommandBuffer(bool begin);
 
 private:
+    ///==========================================================================================
+    ///  Setup/Creation/Initalization Functions
+    ///==========================================================================================
+    
     void createInstance();
     void createDevice();
     void createSwapchain(Catalyst::CatalystPtrSurface);
 
+    void loadLayerList();
+    void loadPhysicalDeviceList();
+
+    ///==========================================================================================
+    ///  Utility Functions
+    ///==========================================================================================
+    
+    std::vector<const char*> getExtentions();
+
+    bool hasLayer(const char* name);
+    void addLayer(const char* name);
+
     uint32_t scoreDeviceSuitability(VkPhysicalDevice&);
 
 private:
+    ///==========================================================================================
+    ///  Catalyst Variables
+    ///==========================================================================================
     Catalyst::RendererInfo m_Info;
-    VkInstance m_Instance;
+    std::unordered_map<Catalyst::PipelineID, std::shared_ptr<VulkanPipeline>> m_Pipelines;
+    Catalyst::CommandPool m_userCommandPool;
+    std::vector<const char*> m_UseLayers;
 
-    VkPhysicalDevice m_PhysicalDevice;
-    VkDevice m_LogicalDevice;
+    ///==========================================================================================
+    ///  Vulkan Variables
+    ///==========================================================================================
+
+    // Buffers
+
+    std::vector<VkLayerProperties> m_AvailableLayers; 
+    std::vector<Catalyst::IDevice*> m_PhysicalDevices;
+
+    // Instance
+
+    VkInstance m_Instance;
+    bool m_Debug = true;
+    VkDebugUtilsMessengerEXT m_Messenger;
+
+    //Devices
+    std::shared_ptr<VulkanDevice> m_Device;
+
+    //Swapchain
 
     VkSurfaceKHR m_Surface;
     VkFormat m_ColorFormat;
     VkColorSpaceKHR m_ColorSpace;
-
-    std::unordered_map<Catalyst::PipelineID, std::shared_ptr<VulkanPipeline>> m_Pipelines;
-    Catalyst::CommandPool m_Pool;
-    std::deque<void*> m_CatalystCommandBuffer;
 };
+
+
+/*
+ * Instance +               Models ----+--- Textetures
+ *          |                          |
+ *       Device ------> Memory --------+--------------+--- Memory Barriers
+ *          |            |                            |
+ *       Queues  +-- CommandPool   Descriptor Pool  Buffers
+ *          |    |       |                |           |
+ *          +    |       |                |          View ---------------------------+
+ *          |    |       |                |           |                              |
+ *       Family--+       |                +-- Descriptor Set / Update Current Set    |
+ *                   Command Buffer       |                                          |
+ *                       |                |                                          |
+ *                       +----------------+------------------------------------ Framebuffers
+ *                       |
+ *                    Render()
+ *               (Populate cmd buffer, Setup Sync, Render)
+ *
+ * NOTE This doesn't include the pipeline, constants, or layouts.
+ *
+*/

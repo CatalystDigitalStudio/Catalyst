@@ -6,6 +6,8 @@
 namespace Catalyst
 {
 
+    extern "C" CatalystResult createVulkanRenderer(IRenderer**, Catalyst::CatalystPtrSurface, RendererInfo);
+
     enum class CatalystArguments
     {
         PROFILE_LOCATION,
@@ -139,7 +141,17 @@ namespace Catalyst
     /// 
     CatalystPtrRenderer Engine::createRenderer(CatalystPtrSurface surface, RendererInfo info)
     {
-        return getPlatform()->createRenderer("vulkanRenderer.dll", surface, info);
+        CatalystPtrRenderer renderer = nullptr;
+
+        auto result = createVulkanRenderer(&renderer, surface, info);
+
+        if (result != CatalystResult::Success)
+        {
+            delete renderer;
+            Engine::raiseError({ Level::Error, "[CATALYST] [RENDERER] Failed to load renderer!" });
+        }
+
+        return renderer;
     }
     CatalystPtrSurface Engine::createSurface(SurfaceData data)
     {

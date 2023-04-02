@@ -124,9 +124,8 @@ void Reactor::onRun()
 
     Catalyst::RendererInfo rInfo = {};
 
-    rInfo.type = Catalyst::CATALYST_RENDERER_TYPE_VULKAN;
+    rInfo.type = Catalyst::CATALYST_RENDERER_TYPE_OPENGL;
     rInfo.flags = (Catalyst::CATALYST_RENDERER_FLAG_DEVICE_DEFAULT);
-
     
     auto surface = Catalyst::Engine::createSurface({ "REACTOR" });
 

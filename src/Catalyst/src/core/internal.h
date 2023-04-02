@@ -194,6 +194,11 @@ namespace Catalyst
     template<typename T>
     CATALYST_LOGIC_DISCARD static constexpr const T* find_first_of(const T* begin, const T* end, const T* delimiter_begin, const T* delimiter_end);
 
+    /**
+    * 
+     */
+    static unsigned int count_KMP(const std::string data, const std::string word);
+
 }
 
 #include "internal.inl"

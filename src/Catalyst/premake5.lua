@@ -45,7 +45,8 @@ project "Catalyst"
     
     links {
         "zlib",
-        "VulkanRenderer"
+        "VulkanRenderer",
+        "OpenGLRenderer"
     }
     
     filter "system:windows"

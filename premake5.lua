@@ -13,7 +13,9 @@ binint = "%{wks.location}/build/bin/int/%{cfg.buildcfg}-%{cfg.architecture}/%{pr
 
 group "Dependencies"
     include "external/zlib"
+    include "external/GLAD"
 group "Renderers"
+    include "src/renderer/OGL"
     include "src/renderer/Vulkan"
     include "src/renderer/DX11"
 group ""

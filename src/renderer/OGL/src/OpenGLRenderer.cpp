@@ -21,7 +21,7 @@ static void catalystDebugMessageCallback(unsigned int source, unsigned int type,
     }
 }
 
-Catalyst::CatalystResult createOpenGLRenderer(Catalyst::IRenderer** renderer, Catalyst::CatalystPtrSurface surface, Catalyst::RendererInfo info)
+extern "C" Catalyst::CatalystResult createOpenGLRenderer(Catalyst::IRenderer * *renderer, Catalyst::CatalystPtrSurface surface, Catalyst::RendererInfo info)
 {
     *renderer = new OpenGLRenderer();
      

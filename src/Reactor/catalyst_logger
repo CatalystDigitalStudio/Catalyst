@@ -1,6 +1,0 @@
-[2022-11-30 21:20:33.919] [catalyst_logger] [error] vkGetPhysicalDeviceProperties2KHR: Emulation found unrecognized structure type in pProperties->pNext - this struct will be ignored
-[2022-11-30 21:20:33.919] [catalyst_logger] [error] vkGetPhysicalDeviceProperties2KHR: Emulation found unrecognized structure type in pProperties->pNext - this struct will be ignored
-[2022-11-30 21:20:36.171] [catalyst_logger] [info] Frames: 1754934
-[2022-11-30 21:20:37.185] [catalyst_logger] [info] Frames: 1808146
-[2022-11-30 21:20:38.200] [catalyst_logger] [info] Frames: 1801944
-[2022-11-30 21:20:39.215] [catalyst_logger] [info] Frames: 1343008

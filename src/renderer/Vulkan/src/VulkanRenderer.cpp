@@ -11,7 +11,7 @@
 #pragma warning(push)
 #pragma warning(disable:26812)
 
-extern "C" CATALYST_API Catalyst::CatalystResult createVulkanRenderer(Catalyst::CatalystPtrRenderer* renderer, Catalyst::CatalystPtrSurface surface, Catalyst::RendererInfo info)
+extern "C" Catalyst::CatalystResult createVulkanRenderer(Catalyst::CatalystPtrRenderer* renderer, Catalyst::CatalystPtrSurface surface, Catalyst::RendererInfo info)
 {
     *renderer = new VulkanRenderer(surface, info);
     if (renderer)

@@ -5,7 +5,7 @@ namespace Catalyst
     namespace files
     {
 
-        typedef struct
+        struct texture
         {
             char* map_file;
 
@@ -26,43 +26,52 @@ namespace Catalyst
 
             float bm = 1.0f;
 
-            enum scaler_channel
+            enum class scaler_channel
             {
                 none, r, g, b, m, l, z
             } imfchan = scaler_channel::none;
 
-            enum reflection_type
+            enum class reflection_type
             {
                 none, sphere, cube_top, cube_front, cube_left, cube_bottom, cube_back, cube_right
             } refltype = reflection_type::none;
 
-        } texture;
+        };
 
-        typedef struct 
+        struct mtl
         {
 
-            char* name;
+            std::string name;
 
+            //Ambient
             float Ka[3] = { 0.0f };
             texture map_Ka;
 
+            //Diffuse
             float Kd[3] = { 0.0f };
             texture map_Kd;
 
+            //Specular
             float Ks[3] = { 0.0f };
             texture map_Ks;
 
+            //Specular Exponent
             float Ns[3] = { 0.0f };
             texture map_Ns;
 
+            //Transparency
             float d     = 1.0f;
-            float Tr    = 1.0f - d;
             texture map_d;
+            //Inverse
+            float Tr    = 1.0f - d;
 
+            //Transmission Filter Color
             float Tf[3] = { 1.0f };
 
+            //Optical Density / Index of Refraction
             float Ni = 1.0f;
 
+            //Illum type
             int illum = 0;
 
             texture map_bump;
@@ -70,25 +79,35 @@ namespace Catalyst
             texture map_decal;
             texture map_refl;
 
+            //Roughness
             float Pr = 0.0f;
             texture map_Pr;
 
+            //Metalic
             float Pm = 0.0f;
             texture map_Pm;
 
+            //Sheen
             float Ps = 0.0f;
             texture map_Ps;
 
+            //Clearcoat thickness
             float Pc = 0.0f;
 
+            //Clearcoat roughness
             float Pcr = 0.0f;
 
+            //Emissive
             float Ke = 0.0f;
             texture map_Ke;
 
+            //anisotropy
             float aniso = 0.0f;
+            //anisotropy rotation
             float anisor = 0.0f;
 
-        } mtl;
+            static void parseMtl(const std::string& path, std::unordered_map<std::string, mtl>& materials);
+
+        };
     }
 }

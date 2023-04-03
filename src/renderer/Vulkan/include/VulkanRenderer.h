@@ -35,7 +35,7 @@ class CATALYST_API VulkanDevice
 
     struct QueueSupport
     {
-        uint32_t index = -1;
+        uint32_t index = uint32_t(-1);
         bool supportsSurface = false;
     };
 

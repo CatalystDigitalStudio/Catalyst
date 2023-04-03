@@ -113,10 +113,10 @@ Reactor::Reactor()
 }
 Reactor::~Reactor()
 {
+
 }
 void Reactor::onRun()
 {
-
 
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     /*                      RENDERER                          */

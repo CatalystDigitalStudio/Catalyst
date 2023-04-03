@@ -10,133 +10,174 @@ namespace Catalyst
     namespace files
     {
 
+        static std::unordered_map<std::string, std::vector<std::string>> mapData(std::ifstream& file, std::unordered_map<std::string, std::tuple<unsigned int, unsigned int, std::string>>& object_faces)
+        {
+            std::unordered_map<std::string, std::vector<std::string>> data = { {"o", {}},{"mtllib", {}},{"v", {}},{"vt", {}},{"vn", {}},{"s", {}},{"f", {}} };
+            std::string line;
+            std::string postfix;
+            std::string prefix;
+            std::string currentName;
+            unsigned int pindex = 0, index = 0;
+
+            while (std::getline(file, line))
+            {
+                auto fs = line.find(' ');
+                postfix = line.substr(fs+1);
+                prefix = { line.begin(), line.begin()+fs};
+                auto& pool = data[prefix];
+                
+                if (prefix == "o")
+                {
+                    currentName = postfix;
+                    object_faces[currentName] = { pindex, index, "" };
+                    pindex = index;
+
+                    pool.push_back(postfix);
+                }
+                else if (prefix == "f")
+                {
+                    auto items = split(postfix, ' ');
+
+                    for (auto& item : items)
+                    {
+                        pool.push_back(item);
+                    }
+
+                    index += items.size();
+                }
+                else if (prefix == "usemtl")
+                {
+                    std::get<2>(object_faces[currentName]) = postfix;
+                }
+                else
+                {
+                    pool.push_back(postfix);
+                }
+            }
+
+            return data;
+        }
+
         obj obj::parseFile(const char* path)
         {
 
 
             obj object = {};
-            std::string data;
 
             ///==========================================================================================
             ///  Read OBJ File
             ///==========================================================================================
+
+            std::ifstream file(path);
+
+            if (!file.is_open())
             {
-
-                std::ifstream t("file.txt");
-                t.seekg(0, std::ios::end);
-                data.reserve(t.tellg());
-                t.seekg(0, std::ios::beg);
-
-                data.assign((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-
-                t.close();
-
+                __debugbreak();
             }
+            std::unordered_map<std::string, std::tuple<unsigned int, unsigned int, std::string>> objf;
+            std::unordered_map<std::string, std::vector<std::string>> data = mapData(file, objf);
 
             ///==========================================================================================
             ///  OBJ Count Objects
             ///==========================================================================================
-
-            unsigned int objects = count_KMP(data, "o ");
-
-            ///==========================================================================================
-            ///  OBJ Count Materials
-            ///==========================================================================================
-
-            unsigned int materials = count_KMP(data, "mtllib ");
+            object.objects.reserve(  data.count("o" ));
+            object.verticies.reserve(data.count("v" ));
+            object.texcoords.reserve(data.count("vt"));
+            object.normals.reserve(  data.count("vn"));
 
             ///==========================================================================================
-            ///  OBJ Allocate
+            ///  OBJ Materials
             ///==========================================================================================
 
-            object.objects = new obj::object[objects];
-            object.materials = new mtl[materials];
-
+            mtl::parseMtl(data["mtllib"][0], object.materials);
+            
             ///==========================================================================================
             ///  OBJ 
             ///==========================================================================================
 
-            std::string o = data.substr(data.find("o "));
-
-            while (data.find("o ") != data.npos)
-            {
-                parseObject(data.substr(data.find("o ")));
-            }
-
-            return object;
-        }
-
-        obj::~obj()
-        {
-
-            if (objects)
-            {
-                delete[] objects;
-            }
-
-            if (materials)
-            {
-                delete[] materials;
-            }
-
-        }
-
-        obj::object obj::parseObject(std::string data)
-        {
-            obj::object object = {};
-
-            unsigned int verticies = count_KMP(data, "v ");
-            unsigned int texcoords = count_KMP(data, "vt ");
-            unsigned int normals   = count_KMP(data, "vn ");
-            unsigned int faces     = count_KMP(data, "f ");
-
-            object.verticies = new obj::verticie[verticies];
-            object.texcoords = new obj::texture[texcoords];
-            object.normals   = new obj::normal[normals];
-            object.faces     = new obj::face[faces];
-
-            std::stringstream ss;
-            ss >> data;
-
-            std::string line;
-
-            while (std::getline(ss, line))
-            {
-
-                if (line.starts_with("o "))
+            // Verticies
+            auto parseVerticies = [&]() {
+                verticie verticie;
+                for (auto& item : data["v"])
                 {
-                    object.name = std::string(line.data() + line.find(' '), line.size());
-                } 
-                else if (line.starts_with("v "))
-                {
-
-                } 
-                else if (line.starts_with("vt "))
-                {
-
-                } 
-                else if (line.starts_with("vn "))
-                {
-
-                } 
-                else if (line.starts_with("usemtl "))
-                {
-
-                } 
-                else if (line.starts_with("f "))
-                {
-
-                } 
-                else if (line.starts_with("g "))
-                {
-
+                    auto items = split(item, ' ');
+                    parseFloats(items.data(), items.size(), (float*)&verticie);
+                    object.verticies.push_back(verticie);
+                    verticie = { 0.0f, 0.0f, 0.0f, 1.0f };
                 }
-                else
+            };
+            auto vFuture = std::async(std::launch::async, parseVerticies);
+
+            // Texture Coordinates
+            auto parseTexcoords = [&]() {
+                texture tex;
+                for (auto& item : data["vt"])
                 {
-                    //ignore
+                    auto items = split(item, ' ');
+                    parseFloats(items.data(), items.size(), (float*)&tex);
+                    object.texcoords.push_back(tex);
+                    tex = { 0.0f };
+                }
+            };
+            auto tFuture = std::async(std::launch::async, parseTexcoords);
+
+            // Normals
+            auto parseNormals = [&]() {
+                normal normals;
+                for (auto& item : data["vn"])
+                {
+                    auto items = split(item, ' ');
+                    parseFloats(items.data(), items.size(), (float*)&normals);
+                    object.normals.push_back(normals);
+                    normals = { 0.0f, 0.0f, 0.0f};
+                }
+            };
+            auto nFuture = std::async(std::launch::async, parseNormals);
+
+            /*
+            * data  -> { "o", { "Obj1", "Obj2" } }
+            * faces -> { "f", { "0/0/0", "1/1/1", "0/0/0", "1/1/1" } }
+            * objf  -> { "Obj1", {0, 2} }, { "Obj2", {3, 4} }
+            * 
+            * name = data["o"] -> "Obj1"
+            * index = objf[name] -> {0, 4}
+            * faces = { "0/0/0", "1/1/1" }
+            */
+
+            unsigned int index = 0;
+            for (auto& name : data["o"])
+            {
+                obj::object objt = { name, {}, {} };
+
+                auto& faces = data["f"];
+                auto indexs = objf[name];
+
+                objt.material = object.materials[std::get<2>(indexs)];
+
+                face face;
+                for (unsigned int i = std::get<0>(indexs); i < std::get<1>(indexs); i++)
+                {
+                    auto items = split(faces[i], '/');
+
+                    parseInts(items.data(), items.size(), (int*)&face);
+                    objt.faces.push_back(face);
+                    face = { 0 };
                 }
 
+                object.objects.push_back(objt);
+
+                ++index;
             }
+
+            ///==========================================================================================
+            ///  FINISH 
+            ///==========================================================================================
+            
+            vFuture.wait();
+            tFuture.wait();
+            nFuture.wait();
+
+            file.close();
 
             return object;
         }

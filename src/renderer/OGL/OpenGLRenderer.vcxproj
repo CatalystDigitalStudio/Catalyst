@@ -149,6 +149,11 @@
   <ItemGroup>
     <ClCompile Include="src\OpenGLRenderer.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\external\GLAD\GLAD.vcxproj">
+      <Project>{5d4a857c-4981-860d-f26d-6c10de83020f}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

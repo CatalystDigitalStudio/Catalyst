@@ -155,6 +155,8 @@
     <ClInclude Include="src\core\utilities.h" />
     <ClInclude Include="src\core\version.h" />
     <ClInclude Include="src\files\file.h" />
+    <ClInclude Include="src\files\mtllib.h" />
+    <ClInclude Include="src\files\obj.h" />
     <ClInclude Include="src\files\parsing.h" />
     <ClInclude Include="src\graphic\commands.h" />
     <ClInclude Include="src\graphic\font.h" />
@@ -179,6 +181,8 @@
     <ClCompile Include="src\core\scene.cpp" />
     <ClCompile Include="src\core\unicode.cpp" />
     <ClCompile Include="src\files\file.cpp" />
+    <ClCompile Include="src\files\mtllib.cpp" />
+    <ClCompile Include="src\files\obj.cpp" />
     <ClCompile Include="src\files\parsing.cpp" />
     <ClCompile Include="src\graphic\commands.cpp" />
     <ClCompile Include="src\graphic\image.cpp" />

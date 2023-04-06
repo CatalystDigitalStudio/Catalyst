@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.2.32526.322
-MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Reactor", "src\Reactor\Reactor.vcxproj", "{55A9939E-C188-123A-CAA0-9D1036FF789B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Catalyst", "src\Catalyst\Catalyst.vcxproj", "{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}"
@@ -20,70 +18,40 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
 		Distro|x64 = Distro|x64
-		Distro|x86 = Distro|x86
 		Release|x64 = Release|x64
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Debug|x64.ActiveCfg = Debug|x64
 		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Debug|x64.Build.0 = Debug|x64
-		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Debug|x86.ActiveCfg = Debug|x64
-		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Debug|x86.Build.0 = Debug|x64
 		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Distro|x64.ActiveCfg = Distro|x64
 		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Distro|x64.Build.0 = Distro|x64
-		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Distro|x86.ActiveCfg = Distro|x64
-		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Distro|x86.Build.0 = Distro|x64
 		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Release|x64.ActiveCfg = Release|x64
 		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Release|x64.Build.0 = Release|x64
-		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Release|x86.ActiveCfg = Release|x64
-		{55A9939E-C188-123A-CAA0-9D1036FF789B}.Release|x86.Build.0 = Release|x64
 		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Debug|x64.ActiveCfg = Debug|x64
 		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Debug|x64.Build.0 = Debug|x64
-		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Debug|x86.ActiveCfg = Debug|x64
-		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Debug|x86.Build.0 = Debug|x64
 		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Distro|x64.ActiveCfg = Distro|x64
 		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Distro|x64.Build.0 = Distro|x64
-		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Distro|x86.ActiveCfg = Distro|x64
-		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Distro|x86.Build.0 = Distro|x64
 		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Release|x64.ActiveCfg = Release|x64
 		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Release|x64.Build.0 = Release|x64
-		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Release|x86.ActiveCfg = Release|x64
-		{CA026E91-B6CF-C89C-DFE8-B644CB14FE2A}.Release|x86.Build.0 = Release|x64
 		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Debug|x64.ActiveCfg = Debug|x64
 		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Debug|x64.Build.0 = Debug|x64
-		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Debug|x86.ActiveCfg = Debug|x64
-		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Debug|x86.Build.0 = Debug|x64
 		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Distro|x64.ActiveCfg = Distro|x64
 		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Distro|x64.Build.0 = Distro|x64
-		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Distro|x86.ActiveCfg = Distro|x64
-		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Distro|x86.Build.0 = Distro|x64
 		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Release|x64.ActiveCfg = Release|x64
 		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Release|x64.Build.0 = Release|x64
-		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Release|x86.ActiveCfg = Release|x64
-		{16CFA17C-0206-A30D-ABF2-881097081F0F}.Release|x86.Build.0 = Release|x64
 		{9ACDAF56-8630-3FFB-2FB6-77B11BF80A7E}.Debug|x64.ActiveCfg = Debug|x64
 		{9ACDAF56-8630-3FFB-2FB6-77B11BF80A7E}.Debug|x64.Build.0 = Debug|x64
-		{9ACDAF56-8630-3FFB-2FB6-77B11BF80A7E}.Debug|x86.ActiveCfg = Debug|x64
 		{9ACDAF56-8630-3FFB-2FB6-77B11BF80A7E}.Distro|x64.ActiveCfg = Distro|x64
 		{9ACDAF56-8630-3FFB-2FB6-77B11BF80A7E}.Distro|x64.Build.0 = Distro|x64
-		{9ACDAF56-8630-3FFB-2FB6-77B11BF80A7E}.Distro|x86.ActiveCfg = Distro|x64
 		{9ACDAF56-8630-3FFB-2FB6-77B11BF80A7E}.Release|x64.ActiveCfg = Release|x64
 		{9ACDAF56-8630-3FFB-2FB6-77B11BF80A7E}.Release|x64.Build.0 = Release|x64
-		{9ACDAF56-8630-3FFB-2FB6-77B11BF80A7E}.Release|x86.ActiveCfg = Release|x64
 		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Debug|x64.ActiveCfg = Debug|x64
 		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Debug|x64.Build.0 = Debug|x64
-		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Debug|x86.ActiveCfg = Debug|x64
-		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Debug|x86.Build.0 = Debug|x64
 		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Distro|x64.ActiveCfg = Distro|x64
 		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Distro|x64.Build.0 = Distro|x64
-		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Distro|x86.ActiveCfg = Distro|x64
-		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Distro|x86.Build.0 = Distro|x64
 		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Release|x64.ActiveCfg = Release|x64
 		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Release|x64.Build.0 = Release|x64
-		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Release|x86.ActiveCfg = Release|x64
-		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,8 +60,5 @@ Global
 		{16CFA17C-0206-A30D-ABF2-881097081F0F} = {53E47842-3FC8-3998-A828-34EB942B241A}
 		{9ACDAF56-8630-3FFB-2FB6-77B11BF80A7E} = {B612E243-229E-4F08-2BAF-D2FC97B9AB08}
 		{4DE5FF47-39B3-F34D-2247-64740EB4CFB2} = {B612E243-229E-4F08-2BAF-D2FC97B9AB08}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0506A2BD-6E52-4115-8080-A3C8F2E90327}
 	EndGlobalSection
 EndGlobal

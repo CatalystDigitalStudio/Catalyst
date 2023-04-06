@@ -1,12 +1,6 @@
 #include "pch.h"
 #include "internal.h"
 
-namespace Catalyst
-{
-
-
-}
-
 #if CATALYST_TRACK_ALLOCATIONS
 
 CATALYST_LOGIC_DISCARD void* operator new(std::size_t size)
@@ -48,3 +42,4 @@ void operator delete[](void* ptr) noexcept
     free(ptr);
 }
 #endif
+

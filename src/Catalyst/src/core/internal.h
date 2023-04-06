@@ -90,6 +90,7 @@
 ///----------------------------------------------
 
 #include <mutex>
+#include <regex>
 #include "utilities.h"
 #include "managment/assets.h"
 
@@ -193,6 +194,53 @@ namespace Catalyst
      */
     template<typename T>
     CATALYST_LOGIC_DISCARD static constexpr const T* find_first_of(const T* begin, const T* end, const T* delimiter_begin, const T* delimiter_end);
+
+    /**
+    * 
+     */
+    static unsigned int count(const std::string data, const std::string word)
+    {
+        unsigned int s = 0;
+        size_t last, index = 0;
+        while ((index = data.find(word, last)) != data.npos)
+        {
+            ++s;
+            last = index;
+        }
+        return s;
+    }
+
+    static std::vector<std::string>& split(const std::string& s, char delim, std::vector<std::string>& elems) {
+        std::stringstream ss(s);
+        std::string item;
+        while (std::getline(ss, item, delim)) {
+            if (item.length() >= 0) {
+                elems.push_back(item);
+            }
+        }
+        return elems;
+    }
+
+    static std::vector<std::string> split(const std::string& s, char delim) {
+        std::vector<std::string> elems;
+        split(s, delim, elems);
+        return elems;
+    }
+
+    inline static void parseFloats(std::string data[4], size_t elements, float* location)
+    {
+        for (unsigned int i = 0; i < elements; i++)
+        {
+            *(location + i) = (float)std::atof(data[i].c_str());
+        }
+    }
+    inline static void parseInts(std::string data[4], size_t elements, int* location)
+    {
+        for (unsigned int i = 0; i < elements; i++)
+        {
+            *(location + i) = (int)std::atoi(data[i].c_str());
+        }
+    }
 
 }
 

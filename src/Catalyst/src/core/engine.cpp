@@ -7,6 +7,7 @@ namespace Catalyst
 {
 
     extern "C" CatalystResult createVulkanRenderer(IRenderer**, Catalyst::CatalystPtrSurface, RendererInfo);
+    extern "C" CatalystResult createOpenGLRenderer(IRenderer**, Catalyst::CatalystPtrSurface, RendererInfo);
 
     enum class CatalystArguments
     {
@@ -142,8 +143,21 @@ namespace Catalyst
     CatalystPtrRenderer Engine::createRenderer(CatalystPtrSurface surface, RendererInfo info)
     {
         CatalystPtrRenderer renderer = nullptr;
+        CatalystResult result = CatalystResult::Unknown;
 
-        auto result = createVulkanRenderer(&renderer, surface, info);
+        switch (info.type)
+        {
+        case CATALYST_RENDERER_TYPE_VULKAN:
+        {
+            result = createVulkanRenderer(&renderer, surface, info);
+            break;
+        }
+        case CATALYST_RENDERER_TYPE_OPENGL:
+        {
+            result = createOpenGLRenderer(&renderer, surface, info);
+            break;
+        }
+        }
 
         if (result != CatalystResult::Success)
         {

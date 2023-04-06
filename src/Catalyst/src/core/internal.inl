@@ -77,5 +77,14 @@ namespace Catalyst
 
         return nullptr;
     }
+    template<typename T>
+    CATALYST_LOGIC_DISCARD static constexpr const T* count_KMP(const T* begin, const T* end, const T* delimiter_begin, const T* delimiter_end)
+    {
+        CATALYST_DEBUG_ASSERT(begin && end && delimiter_begin && delimiter_end, Engine::raiseError({ Level::Error, "CatalystResult::Pointer_Is_Nullptr", CatalystResult::Pointer_Is_Nullptr , __FUNCTION__ }));
+
+        CATALYST_DEBUG_ASSERT(begin < end, Engine::raiseError({ Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
+        CATALYST_DEBUG_ASSERT(delimiter_begin < delimiter_end, Engine::raiseError({ Level::Error, "CatalystResult::End_Is_Less_Than_Begin", CatalystResult::End_Is_Less_Than_Begin , __FUNCTION__ }));
+
+    }
 
 }

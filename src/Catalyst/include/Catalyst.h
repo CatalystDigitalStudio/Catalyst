@@ -9,6 +9,8 @@
 
 #include "../src/files/file.h"
 #include "../src/files/parsing.h"
+#include "../src/files/obj.h"
+#include "../src/files/mtllib.h"
 
 #include "../src/graphic/image.h"
 #include "../src/graphic/renderer.h"

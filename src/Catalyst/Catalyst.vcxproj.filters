@@ -108,6 +108,8 @@
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\files\obj.h" />
+    <ClInclude Include="src\files\mtllib.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="platform\Platform.cpp">
@@ -161,5 +163,7 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\files\obj.cpp" />
+    <ClCompile Include="src\files\mtllib.cpp" />
   </ItemGroup>
 </Project>

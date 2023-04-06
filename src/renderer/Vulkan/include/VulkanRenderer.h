@@ -35,13 +35,13 @@ class CATALYST_API VulkanDevice
 
     struct QueueSupport
     {
-        uint32_t index = -1;
+        uint32_t index = uint32_t(-1);
         bool supportsSurface = false;
     };
 
 public:
     VulkanDevice();
-    VulkanDevice(VkInstance instance, const VkPhysicalDeviceFeatures& features, float queuePriority, bool debug, const std::vector<const char*>& layers, VkPhysicalDevice m_Preselection = VK_NULL_HANDLE);
+    VulkanDevice(VkInstance instance, VkSurfaceKHR surface, const VkPhysicalDeviceFeatures& features, float queuePriority, bool debug, const std::vector<const char*>& layers, VkPhysicalDevice m_Preselection = VK_NULL_HANDLE);
     ~VulkanDevice();
 
 private:
@@ -143,8 +143,11 @@ public:
     ///==========================================================================================
 
     virtual constexpr Catalyst::CommandPool& getCommandPool() override;
-
     VkCommandBuffer getCommandBuffer(bool begin);
+
+public:
+
+    std::shared_ptr<VulkanDevice> getDevice();
 
 private:
     ///==========================================================================================
@@ -153,6 +156,7 @@ private:
     
     void createInstance();
     void createDevice();
+    void createSurface(Catalyst::CatalystPtrSurface);
     void createSwapchain(Catalyst::CatalystPtrSurface);
 
     void loadLayerList();
@@ -162,6 +166,8 @@ private:
     ///  Utility Functions
     ///==========================================================================================
     
+    /// @brief Returns required extensions
+    /// @return vector<const char*>
     std::vector<const char*> getExtentions();
 
     bool hasLayer(const char* name);
@@ -197,7 +203,6 @@ private:
     std::shared_ptr<VulkanDevice> m_Device;
 
     //Swapchain
-
     VkSurfaceKHR m_Surface;
     VkFormat m_ColorFormat;
     VkColorSpaceKHR m_ColorSpace;
@@ -223,4 +228,19 @@ private:
  *
  * NOTE This doesn't include the pipeline, constants, or layouts.
  *
+ * 
+ * ============================================================================
+ * 
+ * Operational order
+ * 
+ * Stage 1:
+ * - Initalize Vulkan instance
+ * - Setup debugging if desired
+ * - Setup surface if desired
+ * - Initalize physical device
+ * - Initalize logical device
+ * 
+ * 
+ * ============================================================================
+ * 
 */

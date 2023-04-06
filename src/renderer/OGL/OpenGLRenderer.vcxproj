@@ -145,8 +145,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\OpenGLRenderer.h" />
+    <ClInclude Include="include\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\OpenGLShader.cpp" />
     <ClCompile Include="src\OpenGLRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>

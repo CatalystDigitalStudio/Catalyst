@@ -12,10 +12,12 @@
     <ClInclude Include="include\OpenGLRenderer.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\OpenGLRenderer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="include\OpenGLShader.cpp" />
   </ItemGroup>
 </Project>

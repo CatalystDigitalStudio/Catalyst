@@ -40,11 +40,14 @@ project "Catalyst"
     includedirs{
         "%{IncludeDir.Catalyst}/src",
         "%{IncludeDir.spdlog}",
-        "%{IncludeDir.external}"
+        "%{IncludeDir.GLAD}/include/",
+        "%{IncludeDir.GLFW}/include/"
     }
     
     links {
         "zlib",
+        "GLAD",
+        "GLFW",
         "VulkanRenderer",
         "OpenGLRenderer"
     }

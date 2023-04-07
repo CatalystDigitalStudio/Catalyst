@@ -78,6 +78,12 @@
     <ClInclude Include="src\files\file.h">
       <Filter>src\files</Filter>
     </ClInclude>
+    <ClInclude Include="src\files\mtllib.h">
+      <Filter>src\files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\files\obj.h">
+      <Filter>src\files</Filter>
+    </ClInclude>
     <ClInclude Include="src\files\parsing.h">
       <Filter>src\files</Filter>
     </ClInclude>
@@ -108,8 +114,6 @@
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\files\obj.h" />
-    <ClInclude Include="src\files\mtllib.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="platform\Platform.cpp">
@@ -148,6 +152,12 @@
     <ClCompile Include="src\files\file.cpp">
       <Filter>src\files</Filter>
     </ClCompile>
+    <ClCompile Include="src\files\mtllib.cpp">
+      <Filter>src\files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\files\obj.cpp">
+      <Filter>src\files</Filter>
+    </ClCompile>
     <ClCompile Include="src\files\parsing.cpp">
       <Filter>src\files</Filter>
     </ClCompile>
@@ -163,7 +173,5 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\files\obj.cpp" />
-    <ClCompile Include="src\files\mtllib.cpp" />
   </ItemGroup>
 </Project>

@@ -2,8 +2,6 @@
 
 #include "Catalyst.h"
 
-
-
 struct TestEvent : public Catalyst::IEvent<TestEvent>
 {
     unsigned int i = 0;

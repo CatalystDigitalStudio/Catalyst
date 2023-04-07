@@ -8,7 +8,8 @@ IncludeDir["external"]  = "%{wks.location}/external"
 IncludeDir["spdlog"]    = "%{wks.location}/external/spdlog/include"
 IncludeDir["stb"]       = "%{wks.location}/external/stb"
 IncludeDir["zlib"]      = "%{wks.location}/external/zlib"
-IncludeDir["GLAD"]      = "%{wks.location}/external/GLAD"
+IncludeDir["GLAD"]      = "%{wks.location}/external/glad/"
+IncludeDir["GLFW"]      = "%{wks.location}/external/glfw/"
 IncludeDir["vulkan"]    = "%{VULKAN_SDK}/Include"
 
     -- Library

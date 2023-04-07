@@ -9,11 +9,23 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\VulkanBuffers.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VulkanDevice.h">
+      <Filter>include</Filter>
+    </ClInclude>
     <ClInclude Include="include\VulkanRenderer.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\VulkanBuffers.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VulkanDevice.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\VulkanRenderer.cpp">
       <Filter>src</Filter>
     </ClCompile>

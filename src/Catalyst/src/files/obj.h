@@ -91,7 +91,7 @@ namespace Catalyst
 
             };
 
-            static obj parseFile(const char*);
+            static obj parseFile(const std::string&);
 
             std::vector<object> objects = {};
             std::unordered_map<std::string, mtl> materials = {};

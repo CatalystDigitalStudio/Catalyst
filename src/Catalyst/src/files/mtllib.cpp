@@ -9,21 +9,20 @@ namespace Catalyst
     namespace files
     {
 
-        static unsigned int getMaterialCount(std::ifstream& file)
+        static unsigned int getMaterialCount(std::string& file)
         {
-            std::string line;
 
-            std::getline(file, line);
-            std::getline(file, line);
+            auto count = file.find(':');
 
-            auto count = line.find(':');
+            if (count == file.npos)
+                return 1;
 
-            return (unsigned int)std::atoi(line.data() + count + 1);
+            return (unsigned int)std::atoi(file.data() + count + 1);
         }
 
         void mtl::parseMtl(const std::string& path, std::unordered_map<std::string, mtl>& materials)
         {
-            std::ifstream file("E:/Nova/ColtMcG1/Catalyst/src/Reactor/assets/" + path);
+            std::ifstream file(path);
 
             if (!file.is_open())
             {
@@ -31,16 +30,17 @@ namespace Catalyst
                 return;
             }
 
-            std::string line;
-
-            materials.reserve(getMaterialCount(file));
-
             std::stringstream buffer;
             buffer << file.rdbuf();
 
             std::string data = buffer.str();
+            std::string line;
 
-            size_t cIndex = data.find("newmtl", 0), nIndex = 0, index = 0;;
+            materials.reserve(getMaterialCount(data));
+
+
+
+            size_t cIndex = data.find("newmtl", 0), nIndex = 0, index = 0;
 
             for (;nIndex != data.size();)
             {

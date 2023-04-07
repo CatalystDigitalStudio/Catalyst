@@ -20,5 +20,10 @@ project "GLAD"
     }
 
     includedirs{
-        "%{IncludeDir.GLAD}"
+        "%{IncludeDir.GLAD}/include"
     }
+    
+    filter "system:windows"
+        links{
+            "opengl32.lib"
+        }

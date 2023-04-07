@@ -12,7 +12,7 @@ namespace Catalyst
 
 
     public:
-        explicit OpenGLProgram();
+        OpenGLProgram();
         ~OpenGLProgram();
 
         void addStage(CatalystShaderStageType stagetype, std::string code);

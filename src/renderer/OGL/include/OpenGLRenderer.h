@@ -4,7 +4,8 @@
 #include "core/logging.h"
 #include "graphic/renderer.h"
 
-#include "glad.h"
+//#include "glad/gl.h"
+#include "include/glad/gl.h"
 
 class OpenGLRenderer : public Catalyst::IRenderer
 {

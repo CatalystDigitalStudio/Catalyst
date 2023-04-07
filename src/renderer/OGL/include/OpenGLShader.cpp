@@ -124,9 +124,10 @@ namespace Catalyst
             glGetProgramInfoLog(m_ID, success, NULL, buffer);
             CATALYST_CORE_ERROR("OpenGL Shader Linking Error: {0}\n\nSHADER IS UNABLE TO BE USED! Fix error and try reloading!", buffer);
             glDeleteProgram(m_ID);
-            return -1;
+            return false;
         }
 
+        return true;
     }
     const unsigned int& OpenGLProgram::getUniform(std::string name)
     {
@@ -162,5 +163,7 @@ namespace Catalyst
         }
 
         glAttachShader(m_ID, id);
+
+        return id;
     }
 }

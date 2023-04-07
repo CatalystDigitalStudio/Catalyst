@@ -17,7 +17,7 @@ CATALYST_LAUNCH(Reactor);
 
 void ReactorErrorHandler(Catalyst::CatalystError&& error)
 {
-    CATALYST_LOG_ERROR(error.message);
+    //CATALYST_LOG_ERROR("CATALYST ERROR HANDLER : {0}", error.message);
 }
 
 static std::atomic<long long> m_FPS;
@@ -117,6 +117,14 @@ Reactor::~Reactor()
 }
 void Reactor::onRun()
 {
+
+    //std::string path;
+    //
+    //std::cin >> path;
+    //
+    //auto obj = Catalyst::files::obj::parseFile(path);
+    //
+    //__debugbreak();
 
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     /*                      RENDERER                          */

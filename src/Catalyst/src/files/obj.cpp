@@ -21,6 +21,12 @@ namespace Catalyst
 
             while (std::getline(file, line))
             {
+
+                if (line.size() <= 1)
+                {
+                    continue;
+                }
+
                 auto fs = line.find(' ');
                 postfix = line.substr(fs+1);
                 prefix = { line.begin(), line.begin()+fs};
@@ -58,7 +64,7 @@ namespace Catalyst
             return data;
         }
 
-        obj obj::parseFile(const char* path)
+        obj obj::parseFile(const std::string& path)
         {
 
 
@@ -72,8 +78,9 @@ namespace Catalyst
 
             if (!file.is_open())
             {
-                __debugbreak();
+                return object;
             }
+
             std::unordered_map<std::string, std::tuple<unsigned int, unsigned int, std::string>> objf;
             std::unordered_map<std::string, std::vector<std::string>> data = mapData(file, objf);
 
@@ -89,7 +96,11 @@ namespace Catalyst
             ///  OBJ Materials
             ///==========================================================================================
 
-            mtl::parseMtl(data["mtllib"][0], object.materials);
+            size_t lastSlash = (path.find_last_of('/') != path.npos ? path.find_last_of('/') : path.find_last_of('\\')) + 1;
+
+            auto mtlpath = std::string(path.begin(), path.begin() + lastSlash) + data["mtllib"][0];
+
+            mtl::parseMtl(mtlpath, object.materials);
             
             ///==========================================================================================
             ///  OBJ 

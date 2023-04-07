@@ -2,7 +2,7 @@
 
 #include "core/internal.h"
 
-#include "glad.h"
+#include "include/glad/gl.h"
 
 static void catalystDebugMessageCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userParam)
 {
@@ -45,10 +45,11 @@ void OpenGLRenderer::initalize()
 
     if (!gladInitalized)
     {
-        gladInitalized = gladLoadGL();
+        gladInitalized = gladLoadGL(nullptr);
 
         if (!gladInitalized)
         {
+            CATALYST_CORE_ERROR("Unable initalize OpenGL!");
             throw;
         }
 

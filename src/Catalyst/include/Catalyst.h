@@ -4,6 +4,7 @@
 #include "../src/core/application.h"
 
 #include "../src/core/engine.h"
+#include "../src/core/error.h"
 
 #include "../src/core/unicode.h"
 

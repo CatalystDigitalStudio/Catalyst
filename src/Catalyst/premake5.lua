@@ -56,6 +56,10 @@ project "Catalyst"
         cppdialect "C++20"
         systemversion "latest"
 
+        links{
+            "opengl32.lib"
+        }
+
     filter "configurations:Debug"
        defines { "CATALYST_DEBUG", "DEBUG" }
        runtime "Debug"

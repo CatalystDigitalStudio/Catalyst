@@ -4,13 +4,62 @@
 ///  CATALYST CPP VERSION DEFINITIONS AND LOGIC
 ///==========================================================================================
 
-#define CATALYST_MAJOR 0
-#define CATALYST_MINOR 0
-#define CATALYST_PATCH 1
 
-#define CATALYST_MACRO_STRING(value) #value
-#define CATALYST_CREATE_VERSION(MAJOR, MINOR, PATCH) CATALYST_MACRO_STRING(MAJOR) "." CATALYST_MACRO_STRING(MINOR) "." CATALYST_MACRO_STRING(PATCH)
+    /*
+     * Please dont alter. This is to let you know what fuctions are availible in this build.
+     * Changing the version may(most likely will) cause issues.
+     */
+
+
+     /*
+      * Build major
+      */
+#define CATALYST_MAJOR 0
+
+      /*
+       * Build minor
+       */
+#define CATALYST_MINOR 0
+
+       /*
+        * Build patch
+        */
+#define CATALYST_PATCH 2
+
+/*
+ * Concatenate preprocessor tokens A and B without expanding macro definitions
+ * (however, if invoked from a macro, macro arguments are expanded).
+ */
+#define CATALYST_CAT_NX(A, B) A ## B
+
+ /*
+  * Concatenate preprocessor tokens A and B after macro-expanding them.
+  */
+#define CATALYST_CAT(A, B) CATALYST_CAT_NX(A, B)
+
+  /*
+   * Turn A into a string literal without expanding macro definitions
+   * (however, if invoked from a macro, macro arguments are expanded).
+   */
+#define CATALYST_STRINGIZE_NX(A) #A
+
+   /*
+    * Turn A into a string literal after macro-expanding it.
+    */
+#define CATALYST_STRINGIZE(A) CATALYST_STRINGIZE_NX(A)
+
+    /*
+     * Create version text from arguments.
+     * No need to force concat items since the compiler with auto concat them at compile time.
+     */
+#define CATALYST_CREATE_VERSION(MAJOR, MINOR, PATCH) CATALYST_STRINGIZE(MAJOR) "." CATALYST_STRINGIZE(MINOR) "." CATALYST_STRINGIZE(PATCH)
+
+
+     /*
+      * Current version of Catalyst
+      */
 #define CATALYST_VERSION CATALYST_CREATE_VERSION(CATALYST_MAJOR, CATALYST_MINOR, CATALYST_PATCH)
+
 
 #define CATALYST_CPP_VERSION_14 201402L
 #define CATALYST_CPP_VERSION_17 201703L
@@ -134,29 +183,12 @@ namespace Catalyst
         IApplication_Recreation_Request = 0b00000000'00000000'10000000'00000100,
     };
 
-    enum class Level
-    {
-        Warning,
-        Error
-    };
-
-    struct CatalystError
-    {
-        Level level = Level::Error;
-        const char* message = 0;
-        CatalystResult reason = CatalystResult::Unknown;
-        const char* function = 0;
-    };
-
     struct IMultithreadable
     {
         std::mutex m_Mutex;
     };
 
-    typedef void (*CatalystErrorHandler)(CatalystError&&);
-
 #ifdef CATALYST_CORE
-
     typedef enum class CatalystArguments CatalystArguments;
     extern const char* catalystArguments[];
 #endif

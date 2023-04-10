@@ -4,6 +4,7 @@
 #include "application.h"
 #include "logging.h"
 
+
 #ifndef CATALYST_HEADER_ENTRY
 #define CATALYST_HEADER_ENTRY
 
@@ -12,12 +13,19 @@ namespace Catalyst
 
     extern CatalystResult CatalystLaunch();
 
+    void testOpenGL();
+    void testVulkan();
+
 }
 
 #if defined(CATALYST_MAIN) || 0//<-- For writting purposes only!
 
 int main(int argc, char** argv, char** envp)
 {
+
+    Catalyst::testOpenGL();
+
+    return 0;
 
     Catalyst::Engine::initalizeEngine(argc, argv, envp);
 

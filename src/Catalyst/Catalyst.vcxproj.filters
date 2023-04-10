@@ -36,9 +36,6 @@
     <ClInclude Include="platform\windows\Windows.h">
       <Filter>platform\windows</Filter>
     </ClInclude>
-    <ClInclude Include="platform\windows\windowsSurface.h">
-      <Filter>platform\windows</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\Profiling.h">
       <Filter>src\core</Filter>
     </ClInclude>
@@ -114,15 +111,13 @@
     <ClInclude Include="src\pch.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\error.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="platform\Platform.cpp">
       <Filter>platform</Filter>
     </ClCompile>
     <ClCompile Include="platform\windows\Windows.cpp">
-      <Filter>platform\windows</Filter>
-    </ClCompile>
-    <ClCompile Include="platform\windows\windowsSurface.cpp">
       <Filter>platform\windows</Filter>
     </ClCompile>
     <ClCompile Include="src\core\Profiling.cpp">
@@ -173,5 +168,8 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\entry.cpp" />
+    <ClCompile Include="src\core\error.cpp" />
+    <ClCompile Include="src\graphic\surface.cpp" />
   </ItemGroup>
 </Project>

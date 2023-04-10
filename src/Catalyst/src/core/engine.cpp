@@ -6,9 +6,6 @@
 namespace Catalyst
 {
 
-    extern "C" CatalystResult createVulkanRenderer(IRenderer**, Catalyst::CatalystPtrSurface, RendererInfo);
-    extern "C" CatalystResult createOpenGLRenderer(IRenderer**, Catalyst::CatalystPtrSurface, RendererInfo);
-
     enum class CatalystArguments
     {
         PROFILE_LOCATION,
@@ -30,7 +27,7 @@ namespace Catalyst
 
         if (start == arguments.npos || end == arguments.npos)
         {
-            Engine::raiseError({ Level::Error, "CatalystResult::Commandline_Argument_Malformed", CatalystResult::Commandline_Argument_Malformed, __FUNCTION__ });
+            raiseError(CATALYST_ERROR(CatalystResult::Commandline_Argument_Malformed));
         }
 
         ++start;
@@ -53,23 +50,8 @@ namespace Catalyst
     }
 
 
-    static void catalyst_s_DefaultHandler(CatalystError&& error)
-    {
-        switch (error.level)
-        {
-        case Level::Warning:
-            CATALYST_CORE_WARN("[{0}] {1}", error.function, error.message); break;
-        case Level::Error:
-            CATALYST_CORE_ERROR("[{0}] {1}", error.function, error.message); break;
-        default:
-            CATALYST_CORE_ERROR("UNKNOWN ERROR LEVEL! [Error : {0}]", error.message); break;
-        }
-    }
-
-
     std::shared_ptr<Platform>                                            Engine::catalyst_s_Platform = Catalyst::initalizePlatform();
-    std::atomic<CatalystError>                                           Engine::catalyst_s_EngineError;
-    std::atomic<CatalystErrorHandler>                                    Engine::catalyst_s_EngineErrorHandler = std::atomic<CatalystErrorHandler>(catalyst_s_DefaultHandler);
+    
     std::atomic_size_t                                                   Engine::catalyst_s_TickIndex = 0;
     std::atomic_size_t                                                   Engine::catalyst_s_Allocations = 0;
     std::atomic_size_t                                                   Engine::catalyst_s_AllocationsSize = 0;
@@ -119,9 +101,9 @@ namespace Catalyst
         ListenerManager::update();
     }
 
-    const char* const Engine::getVersion()
+    const std::string const Engine::getVersion()
     {
-        return CATALYST_VERSION;
+        return std::string(CATALYST_VERSION);
     }
     const unsigned char Engine::getMajorVersion()
     {
@@ -139,39 +121,7 @@ namespace Catalyst
     ///==========================================================================================
     ///  Object creation
     ///==========================================================================================
-    /// 
-    CatalystPtrRenderer Engine::createRenderer(CatalystPtrSurface surface, RendererInfo info)
-    {
-        CatalystPtrRenderer renderer = nullptr;
-        CatalystResult result = CatalystResult::Unknown;
-
-        switch (info.type)
-        {
-        case CATALYST_RENDERER_TYPE_VULKAN:
-        {
-            result = createVulkanRenderer(&renderer, surface, info);
-            break;
-        }
-        case CATALYST_RENDERER_TYPE_OPENGL:
-        {
-            result = createOpenGLRenderer(&renderer, surface, info);
-            break;
-        }
-        }
-
-        if (result != CatalystResult::Success)
-        {
-            delete renderer;
-            Engine::raiseError({ Level::Error, "[CATALYST] [RENDERER] Failed to load renderer!" });
-        }
-
-        return renderer;
-    }
-    CatalystPtrSurface Engine::createSurface(SurfaceData data)
-    {
-        return getPlatform()->createSurface(data);
-    }
-
+    
     const std::shared_ptr<Platform> Engine::getPlatform()
     {
         return catalyst_s_Platform;
@@ -206,21 +156,5 @@ namespace Catalyst
         catalyst_s_AllocationsSize.store(catalyst_s_AllocationsSize - amount);
     }
 
-    ///==========================================================================================
-    ///  CATALYST ERRORS
-    ///==========================================================================================
-    void Engine::setErrorHandler(CatalystErrorHandler handler)
-    {
-        catalyst_s_EngineErrorHandler.store(handler);
-    }
-    void Engine::raiseError(CatalystError&& error)
-    {
-        auto future = std::async(std::launch::async, catalyst_s_EngineErrorHandler.load(), error);
-
-        catalyst_s_EngineError.store(error);
-    }
-    CatalystError Engine::getLastError()
-    {
-        return catalyst_s_EngineError.load();
-    }
+    
 }

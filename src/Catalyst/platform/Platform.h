@@ -19,8 +19,6 @@ namespace Catalyst
     public:
         virtual PlatformData getPlatformData() = 0;
 
-        virtual CatalystPtrSurface createSurface(SurfaceData) = 0;
-
     };
 
     extern std::shared_ptr<Platform> initalizePlatform();

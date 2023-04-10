@@ -151,6 +151,9 @@ namespace Catalyst
     {
         int type = CATALYST_RENDERER_TYPE_NONE;
         int flags = (CATALYST_RENDERER_FLAG_DEVICE_DEFAULT | CATALYST_RENDERER_FLAG_DOUBLE_BUFFER);
+
+        //Used to specify API versions such as [OpenGL](version 4.3)
+        unsigned int major = 4, minor = 3;
     };
 
     class CATALYST_API IDevice
@@ -195,6 +198,8 @@ namespace Catalyst
     };
 
     using CatalystPtrRenderer = IRenderer*;
+
+    std::shared_ptr<IRenderer> createRenderer(Catalyst::RendererInfo&&);
 }
 
 

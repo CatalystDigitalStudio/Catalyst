@@ -20,7 +20,6 @@ namespace Catalyst
 
     public:
         virtual PlatformData getPlatformData() override;
-        virtual CatalystPtrSurface createSurface(SurfaceData) override;
 
     private:
         PlatformData data = {};

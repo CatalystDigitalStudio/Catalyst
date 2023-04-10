@@ -40,7 +40,7 @@ namespace Catalyst
          *
          * \return string - version
          */
-        static const char* const getVersion();
+        static const std::string getVersion();
 
         /**
          * Get the major release version.
@@ -61,29 +61,6 @@ namespace Catalyst
          */
         static const unsigned char getPatchVersion();
 
-        ///==========================================================================================
-        ///  Object creation and management
-        ///==========================================================================================
-
-        /**
-         * @func createRenderer
-         *
-         * @brief Creates a renderer instance.
-         *
-         * It is up to you to control the lifetime of the renderer.
-         * It is recommended that you store the renderer using a std::shared_ptr<IRenderer>,
-         * then reset using the pointer to the renderer.
-         *
-         * \return IRenderer** - Renderer instance
-         */
-        static CatalystPtrRenderer createRenderer(CatalystPtrSurface surface, RendererInfo info);
-
-        /**
-         * .
-         *
-         * \return
-         */
-        static CatalystPtrSurface createSurface(SurfaceData);
 
         /**
          * .
@@ -159,29 +136,10 @@ namespace Catalyst
         ///  CATALYST ERRORS
         ///==========================================================================================
 
-        /**
-         * Set a custom error handler.
-         *
-         * @param handler - custom handler function (Cannot be a class function, namespace is premitted)
-         */
-        static void setErrorHandler(CatalystErrorHandler handler);
-
-        /**
-         * Sets a new error message to be handled.
-         *
-         * @param error - error information to pass on
-         */
-        static void raiseError(CatalystError&& error);
-
-        /**
-         * Gets the last raised error.
-         */
-        CATALYST_LOGIC_DISCARD static CatalystError getLastError();
+        
 
     private:
         static std::shared_ptr<Platform> catalyst_s_Platform;
-        static std::atomic<CatalystError> catalyst_s_EngineError;
-        static std::atomic<CatalystErrorHandler> catalyst_s_EngineErrorHandler;
         static std::atomic_size_t catalyst_s_TickIndex;
         static std::atomic_size_t catalyst_s_Allocations;
         static std::atomic_size_t catalyst_s_AllocationsSize;

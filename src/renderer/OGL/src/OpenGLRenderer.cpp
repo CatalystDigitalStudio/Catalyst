@@ -2,7 +2,8 @@
 
 #include "core/internal.h"
 
-#include "include/glad/gl.h"
+#include "glad/gl.h"
+#include "GLFW/glfw3.h"
 
 static void catalystDebugMessageCallback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int length, const char* message, const void* userParam)
 {
@@ -38,6 +39,15 @@ extern "C" Catalyst::CatalystResult createOpenGLRenderer(Catalyst::IRenderer * *
 void OpenGLRenderer::initalize()
 {
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+    /*               GLFW OPENGL INITALIZATION                */
+    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_Info.major);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_Info.minor);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+
+    /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
     /*              ONE-TIME GLAD INITALIZATION               */
     /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
@@ -45,7 +55,7 @@ void OpenGLRenderer::initalize()
 
     if (!gladInitalized)
     {
-        gladInitalized = gladLoadGL(nullptr);
+        gladInitalized = gladLoadGL(glfwGetProcAddress);
 
         if (!gladInitalized)
         {
